@@ -43,7 +43,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
             // Set authentication into Auth-service
             if (this.dbxAuth.isAuth) {
-                this.authService.setAuth(this.dbxAuth);
+                this.authService.storeAuth(this.dbxAuth);
             }
             console.log('authComp-after', 'You are here!', this.dbxAuth); // For testing purpose
         } else {

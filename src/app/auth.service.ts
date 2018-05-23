@@ -17,7 +17,7 @@ export class AuthService {
         return this.objBehaviorSubject;
     }
 
-    setAuth(inDbxAuth: DbxAuth) {
+    storeAuth(inDbxAuth: DbxAuth) {
         this.dbxAuth = inDbxAuth;
         return this.objBehaviorSubject.next(this.dbxAuth);
     }
