@@ -21,6 +21,7 @@ export class StorageComponent implements OnInit, OnDestroy {
                                 .subscribe((auth) => this.dbxAuth = auth);
 
         if (this.dbxAuth.isAuth) {
+            // ------ Beginning your code ------
             const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
             dbx.filesListFolder({ path: '' })
                 .then(function (response) {
@@ -29,6 +30,7 @@ export class StorageComponent implements OnInit, OnDestroy {
                 .catch(function (error) {
                     console.log(error);
                 });
+            // ------ End of your code ------
         }
     }
 
