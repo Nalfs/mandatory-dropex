@@ -1,0 +1,14 @@
+<p>auth component works!</p>
+
+<div>
+    <button type="button"
+    (click)="handleAuthorization()"
+    [disabled]="dbxAuth.accessToken"
+    >
+        Authorize me!
+    </button>
+</div>
+
+<p>
+    <a routerLink="/" routerLinkActive="active">Back to home</a>
+</p>

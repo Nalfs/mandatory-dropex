@@ -1,0 +1,15 @@
+<p>
+  board component works!
+</p>
+
+
+<ng-template *ngIf="!dbxAuth.isAuth; then thenBlock; else elseBlock"></ng-template>    
+
+<ng-template #thenBlock>
+    <a routerLink="/auth" routerLinkActive="active">Go to Auth</a>
+</ng-template>
+
+<ng-template #elseBlock>
+    <app-storage></app-storage>
+    <a routerLink="/logout" routerLinkActive="active">Logout</a>
+</ng-template>
