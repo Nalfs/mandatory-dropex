@@ -15,6 +15,8 @@ export function getParamFromUrl(param) {
 export function createObjFromParams() {
     try {
         const sQueryString = document.URL.split('#')[1] || document.URL.split('?')[1] || '';
+        const referrerUrl = document.referrer;
+        const trustUrl = 'https://www.dropbox.com';
 
         // This object's properties must be like the return URL from Dropbox API
         const objParams = {
@@ -24,7 +26,7 @@ export function createObjFromParams() {
             account_id: ''
         };
 
-        if (sQueryString) {
+        if (sQueryString && referrerUrl.substring(0, trustUrl.length) === trustUrl) {
             const arrParams = sQueryString.split('&');
             for (let i = 0; i < arrParams.length; i++) {
                 const item = arrParams[i].split('=');
