@@ -15,6 +15,8 @@ export function getParamFromUrl(param) {
 export function createObjFromParams() {
     try {
         const sQueryString = document.URL.split('#')[1] || document.URL.split('?')[1] || '';
+
+        // This object's properties must be like the return URL from Dropbox API
         const objParams = {
             access_token: '',
             token_type: '',
