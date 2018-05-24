@@ -27,9 +27,9 @@ export function createObjFromParams() {
             for (let i = 0; i < arrParams.length; i++) {
                 const item = arrParams[i].split('=');
                 for (const key of Object.keys(objParams)) {
-                if (key === item[0]) {
-                    objParams[key] = item[1];
-                }
+                    if (key === item[0]) {
+                        objParams[key] = item[1];
+                    }
                 }
             }
         }
