@@ -1,6 +1,6 @@
 export function getParamFromUrl(param) {
     try {
-        const sQueryString = document.URL.split('#')[1] || document.URL.split('?')[1];
+        const sQueryString = document.URL.split('#')[1] || document.URL.split('?')[1] || '';
         const searchParams = new URLSearchParams(sQueryString);
         if (searchParams.has(param)) {
             return searchParams.get(param);
@@ -14,7 +14,7 @@ export function getParamFromUrl(param) {
 
 export function createObjFromParams() {
     try {
-        const sQueryString = document.URL.split('#')[1] || document.URL.split('?')[1];
+        const sQueryString = document.URL.split('#')[1] || document.URL.split('?')[1] || '';
         const objParams = {
             access_token: '',
             token_type: '',

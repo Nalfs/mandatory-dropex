@@ -26,7 +26,6 @@ export class AuthComponent implements OnInit, OnDestroy {
         // If auth's not found
         if (!this.dbxAuth.isAuth) {
             console.log('authComp-before', 'You are not logged in!', this.dbxAuth); // For testing purpose
-
             // Get authorization response from Dropbox API
             // Create an object with its specific properties if token is found in URL
             const objParams = createObjFromParams();
@@ -66,6 +65,3 @@ export class AuthComponent implements OnInit, OnDestroy {
         window.location.href = urlAuth;
     }
 }
-
-
-
