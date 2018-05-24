@@ -16,6 +16,6 @@ export interface DbxAuth {
     accessToken?: string;
     tokenType?: string;
     uid?: string;
-    accountId?: number;
+    accountId?: string;
     isAuth?: boolean;
 }

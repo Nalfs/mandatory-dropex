@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 
 import { dropboxConfig, DbxAuth } from '../configs';
-import { getParamFromUrl } from '../utils';
+import { createObjFromParams } from '../utils';
 
 import { AuthService } from '../auth.service';
 
@@ -28,17 +28,18 @@ export class AuthComponent implements OnInit, OnDestroy {
             console.log('authComp-before', 'You are not logged in!', this.dbxAuth); // For testing purpose
 
             // Get authorization response from Dropbox API
-            const access_token = getParamFromUrl('access_token') || '';
-            const token_type = getParamFromUrl('token_type') || '';
-            const uid = getParamFromUrl('uid') || '';
-            const account_id = getParamFromUrl('account_id') || '';
+            // Create an object with its specific properties if token is found in URL
+            const objParams = createObjFromParams();
 
             // Assign to this component property
-            this.dbxAuth = {accessToken: access_token,
-                            tokenType: token_type,
-                            uid: uid,
-                            accountId: account_id,
-                            isAuth: access_token && token_type && uid && account_id ? true : false
+            this.dbxAuth = {accessToken: objParams.access_token,
+                            tokenType: objParams.token_type,
+                            uid: objParams.uid,
+                            accountId: objParams.account_id,
+                            isAuth: objParams.access_token &&
+                                    objParams.token_type &&
+                                    objParams.uid &&
+                                    objParams.account_id ? true : false
                         };
 
             // Set authentication into Auth-service
