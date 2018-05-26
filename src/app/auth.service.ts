@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { DbxAuth } from './configs';
 
+import { storeCredentials, retrieveCredentials, clearCredentials } from './utils';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -11,6 +13,14 @@ export class AuthService {
 
     constructor() {
         this.objBehaviorSubject = new BehaviorSubject(this.dbxAuth);
+
+        // Get back saved credentials
+        const savedCredentials: DbxAuth = retrieveCredentials();
+        if (savedCredentials) {
+            this.storeAuth(savedCredentials);
+        }
+        // For testing purpose
+        console.log('serviceComp-constructor-savedCredentials', savedCredentials);
     }
 
     getAuth(): BehaviorSubject<DbxAuth> {
@@ -19,11 +29,13 @@ export class AuthService {
 
     storeAuth(inDbxAuth: DbxAuth) {
         this.dbxAuth = inDbxAuth;
+        storeCredentials(this.dbxAuth);
         return this.objBehaviorSubject.next(this.dbxAuth);
     }
 
     clearAuth() {
         this.dbxAuth = {};
+        clearCredentials();
         return this.objBehaviorSubject.next(this.dbxAuth);
     }
 }

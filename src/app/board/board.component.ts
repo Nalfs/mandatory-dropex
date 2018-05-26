@@ -5,6 +5,8 @@ import { Dropbox } from 'dropbox';
 import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
 
+import { getParamFromUrl } from '../utils';
+
 @Component({
     selector: 'app-board',
     templateUrl: './board.component.html',
@@ -13,6 +15,7 @@ import { DbxAuth } from '../configs';
 export class BoardComponent implements OnInit, OnDestroy {
     dbxAuth: DbxAuth;
     subscription: Subscription;
+    currentPath = '';
 
     constructor(private authService: AuthService) { }
 
@@ -26,6 +29,9 @@ export class BoardComponent implements OnInit, OnDestroy {
         } else {
             console.log('boardComp', 'You are logged in!', this.dbxAuth.isAuth);
         }
+        this.currentPath = getParamFromUrl('path');
+        console.log('boardComp', 'currentPath', this.currentPath);
+        // End of testing
     }
 
     ngOnDestroy() {

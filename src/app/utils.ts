@@ -1,4 +1,4 @@
-import { dropboxConfig } from './configs';
+import { dropboxConfig, DbxAuth } from './configs';
 
 export function getParamFromUrl(param) {
     try {
@@ -39,6 +39,39 @@ export function createObjFromParams() {
         }
 
         return objParams;
+    } catch (error) {
+        return error;
+    }
+}
+
+export function storeCredentials(credentials: DbxAuth) {
+    try {
+        if (typeof(Storage) !== 'undefined') {
+            const credentialsString = JSON.stringify(credentials);
+            sessionStorage.setItem('dropexCredentials', credentialsString);
+        }
+    } catch (error) {
+        return error;
+    }
+}
+
+export function retrieveCredentials() {
+    try {
+        if (typeof(Storage) !== 'undefined' && sessionStorage.getItem('dropexCredentials')) {
+            return JSON.parse(sessionStorage.getItem('dropexCredentials'));
+        }
+        return null;
+    } catch (error) {
+        return error;
+    }
+}
+
+export function clearCredentials() {
+    try {
+        if (typeof(Storage) !== 'undefined' && sessionStorage.getItem('dropexCredentials')) {
+            sessionStorage.removeItem('dropexCredentials');
+        }
+        return null;
     } catch (error) {
         return error;
     }
