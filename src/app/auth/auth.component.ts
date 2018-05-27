@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 
@@ -16,7 +17,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     dbxAuth: DbxAuth;
     subscription: Subscription;
 
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService, private router: Router) { }
 
     ngOnInit() {
         // Get credentials from service and keep data updated
@@ -41,6 +42,7 @@ export class AuthComponent implements OnInit, OnDestroy {
             // Store credentials into Auth-service and into sessionStorage
             if (this.dbxAuth.isAuth) {
                 this.authService.storeAuth(this.dbxAuth);
+                this.router.navigate(['']); // Navigate the user to homepage
             }
             console.log('authComp-after', 'You are here!', this.dbxAuth); // For testing purpose
         } else {
