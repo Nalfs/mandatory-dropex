@@ -11,8 +11,9 @@ import { DbxAuth } from '../configs';
     styleUrls: ['./storage.component.css']
 })
 export class StorageComponent implements OnInit, OnDestroy {
-    dbxAuth: DbxAuth;
-    subscription: Subscription;
+    private dbxAuth: DbxAuth;
+    private subscription: Subscription;
+    private compEntries: Array<any> = [];
 
     constructor(private authService: AuthService) { }
 
@@ -24,10 +25,10 @@ export class StorageComponent implements OnInit, OnDestroy {
             // ------ Beginning your code ------
             const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
             dbx.filesListFolder({ path: '' })
-                .then(function (response) {
-                    console.log(response);
+                .then((response) => {
+                    this.getEntries(response.entries);
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     console.log(error);
                 });
             // ------ End of your code ------
@@ -36,5 +37,10 @@ export class StorageComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    getEntries(inEntries: Array<any>) {
+        this.compEntries = inEntries;
+        console.log('storageComp-get entries outside', this.compEntries);
     }
 }
