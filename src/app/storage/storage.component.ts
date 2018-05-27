@@ -11,8 +11,9 @@ import { DbxAuth } from '../configs';
   styleUrls: ['./storage.component.css']
 })
 export class StorageComponent implements OnInit, OnDestroy {
-  dbxAuth: DbxAuth;
-  subscription: Subscription;
+    private dbxAuth: DbxAuth;
+    private subscription: Subscription;
+    private compEntries: Array<any> = [];
 
   constructor(private authService: AuthService) {}
 
@@ -20,21 +21,27 @@ export class StorageComponent implements OnInit, OnDestroy {
     this.subscription = this.authService.getAuth()
       .subscribe(auth => (this.dbxAuth = auth));
 
-    if (this.dbxAuth.isAuth) {
-      // ------ Beginning your code ------
-      const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-      dbx.filesListFolder({ path: '' })
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      // ------ End of your code ------
+        if (this.dbxAuth.isAuth) {
+            // ------ Beginning your code ------
+            const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+            dbx.filesListFolder({ path: '' })
+                .then((response) => {
+                    this.getEntries(response.entries);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            // ------ End of your code ------
+        }
     }
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
+    getEntries(inEntries: Array<any>) {
+        this.compEntries = inEntries;
+        console.log('storageComp-get entries outside', this.compEntries);
+    }
   }
-}

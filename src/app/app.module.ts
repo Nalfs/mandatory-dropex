@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
@@ -9,6 +10,7 @@ import { BoardComponent } from './board/board.component';
 import { AuthService } from './auth.service';
 import { StorageComponent } from './storage/storage.component';
 import { LogoutComponent } from './logout/logout.component';
+import { SearchComponent } from './search/search.component';
 
 
 const appRoutes = [
@@ -23,10 +25,12 @@ const appRoutes = [
     AuthComponent,
     BoardComponent,
     StorageComponent,
-    LogoutComponent
+    LogoutComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [AuthService],
