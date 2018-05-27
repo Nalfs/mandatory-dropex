@@ -12,6 +12,7 @@ import { DbxAuth } from '../configs';
 })
 export class StorageComponent implements OnInit, OnDestroy {
   private dbxAuth: DbxAuth;
+  private http: HttpClient;
   private subscription: Subscription;
   private compEntries: Array<any> = [];
 
@@ -35,6 +36,17 @@ export class StorageComponent implements OnInit, OnDestroy {
       // ------ End of your code ------
     }
   }
+  downloadFile() {
+    const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+    dbx.filesGetTemporaryLink({ path: '/Bok1.xlsx' })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   getEntries(inEntries: Array<any>) {
     this.compEntries = inEntries;
     console.log('storageComp-get entries outside', this.compEntries);

@@ -1,6 +1,7 @@
 <p>
   storage component works!
 </p>
-<ul>
-  <li *ngFor="let entry of compEntries">{{ entry.name }}</li>
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let entry of compEntries">{{ entry.name }}</li>
 </ul>
+<button *ngIf="this.dbxAuth.isAuth" class="btn btn-primary" (click)="downloadFile()">Download</button>
