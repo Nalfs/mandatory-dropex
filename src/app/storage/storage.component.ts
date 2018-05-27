@@ -6,35 +6,35 @@ import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
 
 @Component({
-    selector: 'app-storage',
-    templateUrl: './storage.component.html',
-    styleUrls: ['./storage.component.css']
+  selector: 'app-storage',
+  templateUrl: './storage.component.html',
+  styleUrls: ['./storage.component.css']
 })
 export class StorageComponent implements OnInit, OnDestroy {
-    dbxAuth: DbxAuth;
-    subscription: Subscription;
+  dbxAuth: DbxAuth;
+  subscription: Subscription;
 
-    constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
-    ngOnInit() {
-        this.subscription = this.authService.getAuth()
-                                .subscribe((auth) => this.dbxAuth = auth);
+  ngOnInit() {
+    this.subscription = this.authService.getAuth()
+      .subscribe(auth => (this.dbxAuth = auth));
 
-        if (this.dbxAuth.isAuth) {
-            // ------ Beginning your code ------
-            const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-            dbx.filesListFolder({ path: '' })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            // ------ End of your code ------
-        }
+    if (this.dbxAuth.isAuth) {
+      // ------ Beginning your code ------
+      const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+      dbx.filesListFolder({ path: '' })
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      // ------ End of your code ------
     }
+  }
 
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-    }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }
