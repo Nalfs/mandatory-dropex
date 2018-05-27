@@ -13,8 +13,8 @@ import { DbxAuth } from '../configs';
 export class SearchComponent implements OnInit, OnDestroy {
 
   // TESTING ONLY
-  dbxAuth: DbxAuth;
-  subscription: Subscription;
+  private dbxAuth: DbxAuth;
+  private subscription: Subscription;
 
   constructor(private authService: AuthService) { }
 
