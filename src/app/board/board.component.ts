@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 
@@ -15,23 +16,22 @@ import { getParamFromUrl } from '../utils';
 export class BoardComponent implements OnInit, OnDestroy {
     dbxAuth: DbxAuth;
     subscription: Subscription;
-    currentPath = '';
+    currentPath = getParamFromUrl('path');
 
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService, private router: Router) { }
 
     ngOnInit() {
         this.subscription = this.authService.getAuth()
                                 .subscribe((auth) => this.dbxAuth = auth);
 
-        // For testing purpose
         if (!this.dbxAuth.isAuth) {
-            console.log('boardComp', 'You are not logged in!', this.dbxAuth.isAuth);
+            console.log('boardComp', 'You are not logged in!', this.dbxAuth.isAuth); // For testing purpose
+            this.router.navigate(['/auth']);
         } else {
-            console.log('boardComp', 'You are logged in!', this.dbxAuth.isAuth);
+            console.log('boardComp', 'You are logged in!', this.dbxAuth.isAuth); // For testing purpose
+            // Do stuff here
         }
-        this.currentPath = getParamFromUrl('path');
-        console.log('boardComp', 'currentPath', this.currentPath);
-        // End of testing
+        console.log('boardComp', 'currentPath', this.currentPath); // For testing purpose
     }
 
     ngOnDestroy() {
