@@ -47,6 +47,7 @@ export class AuthComponent implements OnInit, OnDestroy {
             console.log('authComp-after', 'You are here!', this.dbxAuth); // For testing purpose
         } else {
             console.log('authComp', 'You are logged in!', this.dbxAuth.isAuth); // For testing purpose
+            this.router.navigate(['']); // Navigate the user to homepage
         }
     }
 
