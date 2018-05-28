@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AuthService } from './auth.service';
+import { DropexService } from './dropex.service';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
@@ -35,7 +36,7 @@ const appRoutes = [
     RouterModule.forRoot(appRoutes),
     HttpClientModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, DropexService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
