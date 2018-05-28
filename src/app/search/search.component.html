@@ -6,7 +6,13 @@
 <div *ngIf="!authService.isAuth">
   <form #form="ngForm" class="form-group">
     <label for="username">Search</label>
-      <input class="form-control" type="text" name="search" placeholder="Search">
+      <input class="form-control"
+             type="text" 
+             name="search" 
+             placeholder="Search" 
+             required 
+             minlength="1"
+             [(ngModel)]="query">
      <button type="submit" (click)="search($event); form.reset()" [disabled]="!form.form.valid">Search</button>
     </form>
 </div> 
