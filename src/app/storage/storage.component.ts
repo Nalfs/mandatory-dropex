@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 
 import { AuthService } from '../auth.service';
+import { FileService } from '../file.service';
 import { DbxAuth } from '../configs';
 
 @Component({
@@ -11,12 +12,13 @@ import { DbxAuth } from '../configs';
   styleUrls: ['./storage.component.css']
 })
 export class StorageComponent implements OnInit, OnDestroy {
+  @Input() path: string;
+
   private dbxAuth: DbxAuth;
-  private http: HttpClient;
   private subscription: Subscription;
   private compEntries: Array<any> = [];
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private fileService: FileService ) {}
 
   ngOnInit() {
     this.subscription = this.authService
@@ -26,7 +28,7 @@ export class StorageComponent implements OnInit, OnDestroy {
     if (this.dbxAuth.isAuth) {
       // ------ Beginning your code ------
       const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-      dbx.filesListFolder({ path: '' })
+      dbx.filesListFolder({ path: '/' + this.path })
         .then(response => {
           this.getEntries(response.entries);
         })
@@ -40,7 +42,8 @@ export class StorageComponent implements OnInit, OnDestroy {
     const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
     dbx.filesGetTemporaryLink({ path: '/Bok1.xlsx' })
       .then((response) => {
-        console.log(response);
+        console.log(response.link);
+        this.fileService.downloadFile(response.link);
       })
       .catch((error) => {
         console.log(error);
