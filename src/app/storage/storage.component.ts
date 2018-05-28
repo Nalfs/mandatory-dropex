@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 
 import { AuthService } from '../auth.service';
-import { FileService } from '../file.service';
 import { DbxAuth } from '../configs';
 
 @Component({
@@ -18,7 +17,7 @@ export class StorageComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private compEntries: Array<any> = [];
 
-  constructor(private authService: AuthService, private fileService: FileService ) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.subscription = this.authService
@@ -46,7 +45,7 @@ export class StorageComponent implements OnInit, OnDestroy {
     dbx.filesGetTemporaryLink({ path: '/Bok1.xlsx' })
       .then((response) => {
         console.log(response.link);
-        this.fileService.downloadFile(response.link);
+        // this.fileService.downloadFile(response.link);
       })
       .catch((error) => {
         console.log(error);
