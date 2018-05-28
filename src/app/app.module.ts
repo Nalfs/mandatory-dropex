@@ -18,6 +18,7 @@ import { FileService } from './file.service';
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
     { path: 'logout', component: LogoutComponent },
+    { path: 'search', component: SearchComponent },
     { path: '', component: BoardComponent }
 ];
 

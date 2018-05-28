@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
+import { HttpClient, HttpResponse, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
@@ -12,18 +14,22 @@ import { DbxAuth } from '../configs';
 })
 export class SearchComponent implements OnInit, OnDestroy {
 
-  // TESTING ONLY
+  compMatches = [];
   dbxAuth: DbxAuth;
   subscription: Subscription;
 
-  constructor(private authService: AuthService) { }
+  query;
+
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
+
+
+  }
 
   ngOnInit() {
       this.subscription = this.authService.getAuth()
                               .subscribe((auth) => this.dbxAuth = auth);
-
       if (this.dbxAuth.isAuth) {
-          // ------ Beginning your code ------
+
           const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
           dbx.filesListFolder({ path: '' })
               .then(function (response) {
@@ -32,12 +38,42 @@ export class SearchComponent implements OnInit, OnDestroy {
               .catch(function (error) {
                   console.log(error);
               });
-          // ------ End of your code ------
       }
   }
 
   search(event) {
-    console.log('Hello world');
+    this.router.navigate(['/search']);
+    let httpOptions;
+        httpOptions = {
+        headers: new HttpHeaders({
+            'Authorization': 'Bearer ' + this.dbxAuth.accessToken,
+            'Content-Type': 'application/json',
+        })
+      };
+
+      const payload = {
+        'path': '',
+        'query': this.query,
+        'mode': 'filename_and_content'
+
+
+      };
+
+     console.log(payload);
+    const tmp = this.http.post('https://api.dropboxapi.com/2/files/search', payload, httpOptions);
+    tmp.subscribe((results: any) => {
+      console.log(results);
+      this.getMatches(results.matches);
+    },
+    error => {
+      console.error('error', error);
+    });
+    return tmp;
+  }
+
+  getMatches (obj: Array<any>) {
+    this.compMatches = obj;
+    console.log(this.compMatches);
   }
 
   ngOnDestroy() {
