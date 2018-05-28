@@ -14,8 +14,8 @@ import { AuthService } from '../auth.service';
     styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit, OnDestroy {
-    dbxAuth: DbxAuth;
-    subscription: Subscription;
+    private dbxAuth: DbxAuth;
+    private subscription: Subscription;
 
     constructor(private authService: AuthService, private router: Router) { }
 

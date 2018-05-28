@@ -14,9 +14,9 @@ import { getParamFromUrl } from '../utils';
     styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit, OnDestroy {
-    dbxAuth: DbxAuth;
-    subscription: Subscription;
-    currentPath = getParamFromUrl('path');
+    private dbxAuth: DbxAuth;
+    private subscription: Subscription;
+    private currentPath = getParamFromUrl('path');
 
     constructor(private authService: AuthService, private router: Router) { }
 
