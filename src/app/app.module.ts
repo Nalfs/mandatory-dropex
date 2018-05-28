@@ -4,16 +4,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+import { AuthService } from './auth.service';
+
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { BoardComponent } from './board/board.component';
-
-import { AuthService } from './auth.service';
 import { StorageComponent } from './storage/storage.component';
 import { LogoutComponent } from './logout/logout.component';
 import { SearchComponent } from './search/search.component';
-import { FileService } from './file.service';
-
 
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
@@ -37,7 +35,7 @@ const appRoutes = [
     RouterModule.forRoot(appRoutes),
     HttpClientModule
   ],
-  providers: [AuthService, FileService],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
