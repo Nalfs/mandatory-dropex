@@ -1,7 +1,19 @@
 <p>
   storage component works!
 </p>
-<ul class="list-group">
-  <li class="list-group-item" *ngFor="let entry of compEntries">{{ entry.name }}</li>
-</ul>
+<!-- <ul class="list-group">
+  <li class="list-group-item" *ngFor="let entry of compEntries">{{ entry['.tag'] }}</li>
+</ul> -->
 <button *ngIf="this.dbxAuth.isAuth" class="btn btn-primary" (click)="downloadFile()">Download</button>
+
+<div *ngFor="let item of compEntries">
+  <ng-template *ngIf="item['.tag'] === 'folder';then thenBlock; else elseBlock">
+  </ng-template>
+  <ng-template #thenBlock>
+    <a href="/?path={{item.path_lower}}">{{ item.name }}</a>
+  </ng-template>
+
+  <ng-template #elseBlock>
+    {{ item.name }}
+  </ng-template>
+</div>
