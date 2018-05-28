@@ -1,46 +1,64 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 
 import { AuthService } from '../auth.service';
+import { FileService } from '../file.service';
 import { DbxAuth } from '../configs';
 
 @Component({
-    selector: 'app-storage',
-    templateUrl: './storage.component.html',
-    styleUrls: ['./storage.component.css']
+  selector: 'app-storage',
+  templateUrl: './storage.component.html',
+  styleUrls: ['./storage.component.css']
 })
 export class StorageComponent implements OnInit, OnDestroy {
-    private dbxAuth: DbxAuth;
-    private subscription: Subscription;
-    private compEntries: Array<any> = [];
+  @Input() path: string;
 
-    constructor(private authService: AuthService) { }
+  private dbxAuth: DbxAuth;
+  private subscription: Subscription;
+  private compEntries: Array<any> = [];
 
-    ngOnInit() {
-        this.subscription = this.authService.getAuth()
-                                .subscribe((auth) => this.dbxAuth = auth);
+  constructor(private authService: AuthService, private fileService: FileService ) {}
 
-        if (this.dbxAuth.isAuth) {
-            // ------ Beginning your code ------
-            const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-            dbx.filesListFolder({ path: '' })
-                .then((response) => {
-                    this.getEntries(response.entries);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-            // ------ End of your code ------
-        }
+  ngOnInit() {
+    this.subscription = this.authService
+      .getAuth()
+      .subscribe(auth => (this.dbxAuth = auth));
+
+    if (this.dbxAuth.isAuth) {
+      // ------ Beginning your code ------
+      const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+      const localPath = this.path ? '/' + this.path : '';
+
+      dbx.filesListFolder({ path: localPath })
+        .then(response => {
+          this.getEntries(response.entries);
+          console.log(response.entries[0]['.tag']);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      // ------ End of your code ------
     }
+  }
+  downloadFile() {
+    const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+    dbx.filesGetTemporaryLink({ path: '/Bok1.xlsx' })
+      .then((response) => {
+        console.log(response.link);
+        this.fileService.downloadFile(response.link);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-    }
+  getEntries(inEntries: Array<any>) {
+    this.compEntries = inEntries;
+    console.log('storageComp-get entries outside', this.compEntries);
+  }
 
-    getEntries(inEntries: Array<any>) {
-        this.compEntries = inEntries;
-        console.log('storageComp-get entries outside', this.compEntries);
-    }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

@@ -10,7 +10,7 @@
 </ng-template>
 
 <ng-template #elseBlock>
-    <app-storage></app-storage>
+    <app-storage [path]="currentPath"></app-storage>
     <app-search></app-search>
     <a routerLink="/logout" routerLinkActive="active">Logout</a>
 </ng-template>

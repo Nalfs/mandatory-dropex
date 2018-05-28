@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
@@ -12,11 +12,13 @@ import { AuthService } from './auth.service';
 import { StorageComponent } from './storage/storage.component';
 import { LogoutComponent } from './logout/logout.component';
 import { SearchComponent } from './search/search.component';
+import { FileService } from './file.service';
 
 
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
     { path: 'logout', component: LogoutComponent },
+    { path: 'search', component: SearchComponent },
     { path: '', component: BoardComponent }
 ];
 
@@ -35,7 +37,7 @@ const appRoutes = [
     RouterModule.forRoot(appRoutes),
     HttpClientModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, FileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
