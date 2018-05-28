@@ -17,6 +17,7 @@ import { SearchComponent } from './search/search.component';
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
     { path: 'logout', component: LogoutComponent },
+    { path: 'search', component: SearchComponent },
     { path: '', component: BoardComponent }
 ];
 

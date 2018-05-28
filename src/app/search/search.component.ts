@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 import { HttpClient, HttpResponse, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
@@ -13,25 +14,22 @@ import { DbxAuth } from '../configs';
 })
 export class SearchComponent implements OnInit, OnDestroy {
 
-  // TESTING ONLY
+
   dbxAuth: DbxAuth;
   subscription: Subscription;
-/*   userQueries; */
+
   query;
 
-  constructor(private authService: AuthService, private http: HttpClient) {
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
 
-   /*  this.userQueries = {
-      queries: [{query: ''}]
-    }; */
+
   }
 
   ngOnInit() {
       this.subscription = this.authService.getAuth()
                               .subscribe((auth) => this.dbxAuth = auth);
-
       if (this.dbxAuth.isAuth) {
-          // ------ Beginning your code ------
+
           const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
           dbx.filesListFolder({ path: '' })
               .then(function (response) {
@@ -40,12 +38,11 @@ export class SearchComponent implements OnInit, OnDestroy {
               .catch(function (error) {
                   console.log(error);
               });
-          // ------ End of your code ------
       }
   }
 
   search(event) {
-
+    this.router.navigate(['/search']);
     let httpOptions;
         httpOptions = {
         headers: new HttpHeaders({
@@ -54,7 +51,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         })
       };
 
-
       const payload = {
         'path': '',
         'query': this.query,
@@ -62,17 +58,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
 
       };
-    /*  const payload = {
-      queries: [{
-        query: this.query,
-        mode: {
-          '.tag': 'field_name',
-          'field_name': 'Security'
-           },
-          'logical_operator': 'or_operator'
-          }],
-          'template_filter': 'filter_none'
-     }; */
+
      console.log(payload);
     const tmp = this.http.post('https://api.dropboxapi.com/2/files/search', payload, httpOptions);
     tmp.subscribe((results) => {
