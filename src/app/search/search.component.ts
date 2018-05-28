@@ -54,7 +54,15 @@ export class SearchComponent implements OnInit, OnDestroy {
         })
       };
 
-     const payload = {
+
+      const payload = {
+        'path': '',
+        'query': this.query,
+        'mode': 'filename_and_content'
+
+
+      };
+    /*  const payload = {
       queries: [{
         query: this.query,
         mode: {
@@ -64,9 +72,9 @@ export class SearchComponent implements OnInit, OnDestroy {
           'logical_operator': 'or_operator'
           }],
           'template_filter': 'filter_none'
-     };
+     }; */
      console.log(payload);
-    const tmp = this.http.post('https://api.dropboxapi.com/2/file_properties/properties/search', payload, httpOptions);
+    const tmp = this.http.post('https://api.dropboxapi.com/2/files/search', payload, httpOptions);
     tmp.subscribe((results) => {
       console.log(results);
     },
