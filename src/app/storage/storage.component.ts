@@ -28,7 +28,12 @@ export class StorageComponent implements OnInit, OnDestroy {
     if (this.dbxAuth.isAuth) {
       // ------ Beginning your code ------
       const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-      dbx.filesListFolder({ path: '/' + this.path })
+      const localPath = this.path ? '/' + this.path : '';
+
+
+
+
+      dbx.filesListFolder({ path: localPath })
         .then(response => {
           this.getEntries(response.entries);
         })
