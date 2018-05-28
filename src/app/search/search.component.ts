@@ -14,7 +14,7 @@ import { DbxAuth } from '../configs';
 })
 export class SearchComponent implements OnInit, OnDestroy {
 
-
+  compMatches = [];
   dbxAuth: DbxAuth;
   subscription: Subscription;
 
@@ -61,13 +61,19 @@ export class SearchComponent implements OnInit, OnDestroy {
 
      console.log(payload);
     const tmp = this.http.post('https://api.dropboxapi.com/2/files/search', payload, httpOptions);
-    tmp.subscribe((results) => {
+    tmp.subscribe((results: any) => {
       console.log(results);
+      this.getMatches(results.matches);
     },
     error => {
       console.error('error', error);
     });
     return tmp;
+  }
+
+  getMatches (obj: Array<any>) {
+    this.compMatches = obj;
+    console.log(this.compMatches);
   }
 
   ngOnDestroy() {
