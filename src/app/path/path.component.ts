@@ -10,6 +10,8 @@ export class PathComponent implements OnInit {
 
     constructor(private dropexService: DropexService) { }
 
+   routes;
+
    ngOnInit() {
     this.dropexService.stream.subscribe((routes) => {
         this.routes = routes;
