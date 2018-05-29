@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AuthService } from './auth.service';
-import { DropexService } from './dropex.service';
+
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
@@ -14,7 +14,7 @@ import { StorageComponent } from './storage/storage.component';
 import { LogoutComponent } from './logout/logout.component';
 import { SearchComponent } from './search/search.component';
 import { UploadComponent } from './upload/upload.component';
-import { PathComponent } from './path/path.component';
+
 
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
@@ -32,7 +32,6 @@ const appRoutes = [
     LogoutComponent,
     SearchComponent,
     UploadComponent,
-    PathComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +39,7 @@ const appRoutes = [
     RouterModule.forRoot(appRoutes),
     HttpClientModule
   ],
-  providers: [AuthService, DropexService],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

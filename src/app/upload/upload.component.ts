@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-
 import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
 
@@ -41,16 +40,11 @@ export class UploadComponent implements OnInit {
 
   upload() {
 
-    const path = (this.currentPath) ? this.currentPath : '/';
-    const paths = this.file.name.split('\\');
-    const filename = paths.pop();
-<<<<<<< HEAD
-=======
-    console.log(paths);
-
->>>>>>> 57d7bc527dbb1cdf205f6edf1e5083220a7db557
+   // const filepath  = this.dropexService.getCurrentPath();
+    const filepath = this.currentPath;
+    const name = this.file.name.split('\\').pop();
     const payload = {
-      path: `${path}${filename}`,
+      path: filepath + '/' + name,
       mode: 'add',
       autorename: true,
       mute: false

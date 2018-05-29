@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 
 import { AuthService } from '../auth.service';
-import { DropexService } from '../dropex.service';
 import { DbxAuth } from '../configs';
 
 @Component({
@@ -18,7 +17,7 @@ export class StorageComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private compEntries: Array<any> = [];
 
-  constructor(private authService: AuthService, private dropexService: DropexService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.subscription = this.authService
@@ -47,9 +46,7 @@ export class StorageComponent implements OnInit, OnDestroy {
         }); */
     }
   }
-  addPath(url) {
-    this.dropexService.addPath(url);
-  }
+
   previewFile(event) {
     console.log(event.target.innerText);
   }
