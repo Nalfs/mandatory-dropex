@@ -32,6 +32,12 @@ export class StorageComponent implements OnInit, OnDestroy {
       dbx.filesListFolder({ path: localPath })
         .then(response => {
           this.getEntries(response.entries);
+          dbx.filesGetThumbnail({ path: response.entries[10].path_display, format: 'jpeg', size: 'w64h64' })
+            .then((result) => {
+              console.log(result);
+              const fileUrl = URL.createObjectURL(result.fileBlob);
+              document.getElementById('bild').setAttribute('src', fileUrl);
+            });
           console.log(response.entries[0]['.tag']);
         })
         .catch(error => {

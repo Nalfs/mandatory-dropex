@@ -14,6 +14,7 @@ import { StorageComponent } from './storage/storage.component';
 import { LogoutComponent } from './logout/logout.component';
 import { SearchComponent } from './search/search.component';
 import { UploadComponent } from './upload/upload.component';
+import { FilesizePipe } from './filesize.pipe';
 
 
 const appRoutes = [
@@ -32,6 +33,7 @@ const appRoutes = [
     LogoutComponent,
     SearchComponent,
     UploadComponent,
+    FilesizePipe,
   ],
   imports: [
     BrowserModule,
