@@ -12,7 +12,7 @@ import { DbxAuth } from '../configs';
 })
 export class StorageComponent implements OnInit, OnDestroy {
   @Input() path: string;
-
+  thumb;
   private dbxAuth: DbxAuth;
   private subscription: Subscription;
   private compEntries: Array<any> = [];
@@ -38,6 +38,12 @@ export class StorageComponent implements OnInit, OnDestroy {
           console.log(error);
         });
       // ------ End of your code ------
+      dbx.filesGetThumbnail({ path: '/fka_twigs_lg.jpg'})
+        .then((data) => {
+          console.log(data);
+          this.thumb = data.path_display;
+          document.getElementById('bild').setAttribute('src', data.path_lower);
+        });
     }
   }
   previewFile(event) {

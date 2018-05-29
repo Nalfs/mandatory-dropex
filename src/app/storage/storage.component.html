@@ -4,17 +4,49 @@
 <!-- <ul class="list-group">
   <li class="list-group-item" *ngFor="let entry of compEntries">{{ entry['.tag'] }}</li>
 </ul> -->
-
-<div *ngFor="let item of compEntries">
-
-  <ng-template *ngIf="item['.tag'] === 'folder';then thenBlock; else elseBlock"></ng-template>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      Name
+    </div>
+    <div class="col-sm">
+      Last changed
+    </div>
+    <div class="col-sm">
+      Size
+    </div>        
+  </div>
+</div>
+<div class="container">
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let item of compEntries">
   
-  <ng-template #thenBlock>
-    <a href="/?path={{item.path_lower}}">{{ item.name }}</a>
-  </ng-template>
-
-  <ng-template #elseBlock>
-    <a (click)="downloadFile(item.path_lower, item.name, $event)" href="#"><span>{{ item.name }}</span></a>
-  </ng-template>
-
+      <ng-template *ngIf="item['.tag'] === 'folder';then thenBlock; else elseBlock"></ng-template>
+  
+      <ng-template #thenBlock>
+        <div class='row'>
+          <div class="col-sm">
+            <div>
+              <a href="/?path={{item.path_lower}}">{{ item.name }}</a>
+            </div>
+            <div>
+             
+            </div>
+          </div>
+        </div>
+      </ng-template>
+  
+      <ng-template #elseBlock>
+        <div class="row">
+          <div class="col-sm">
+            
+          </div>
+        </div>
+        <a (click)="downloadFile(item.path_lower, item.name, $event)" href="#">
+          <span>{{ item.name }}</span>
+        </a>
+      </ng-template>
+    </li>
+  </ul>
+  <img id="bild" />
 </div>
