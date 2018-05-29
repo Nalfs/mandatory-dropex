@@ -40,7 +40,6 @@ export class UploadComponent implements OnInit {
 
 
   upload() {
-    this.router.navigate(['/upload']);
 
     const path = (this.currentPath) ? this.currentPath : '/';
     const paths = this.file.name.split('\\');
