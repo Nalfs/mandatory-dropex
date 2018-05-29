@@ -1,10 +1,9 @@
 <p>
-  storage component works!
+  storage component works! Don't click if you don't want download
 </p>
 <!-- <ul class="list-group">
   <li class="list-group-item" *ngFor="let entry of compEntries">{{ entry['.tag'] }}</li>
 </ul> -->
-<button *ngIf="this.dbxAuth.isAuth" class="btn btn-primary" (click)="downloadFile()">Download</button>
 
 <div *ngFor="let item of compEntries">
 
@@ -15,7 +14,7 @@
   </ng-template>
 
   <ng-template #elseBlock>
-    <span>{{ item.name }}</span>
+    <a (click)="downloadFile(item.path_lower, item.name, $event)" href="#"><span>{{ item.name }}</span></a>
   </ng-template>
 
 </div>
