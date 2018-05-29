@@ -19,6 +19,7 @@ const appRoutes = [
     { path: 'auth', component: AuthComponent },
     { path: 'logout', component: LogoutComponent },
     { path: 'search', component: SearchComponent },
+    { path: 'upload', component: UploadComponent },
     { path: '', component: BoardComponent }
 ];
 
