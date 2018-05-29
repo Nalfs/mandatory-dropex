@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
-import { HttpClient, HttpResponse, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../auth.service';
@@ -14,32 +14,28 @@ import { DbxAuth } from '../configs';
 })
 export class SearchComponent implements OnInit, OnDestroy {
 
-  compMatches = [];
-  dbxAuth: DbxAuth;
-  subscription: Subscription;
+    public compMatches = [];
+    private dbxAuth: DbxAuth;
+    private subscription: Subscription;
+    public query;
+    public matches = 0;
+    public gotMatch = false;
 
-  query;
-
-  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
+  constructor(private authService: AuthService,
+              private http: HttpClient,
+              private router: Router) {
 
 
   }
 
   ngOnInit() {
-      this.subscription = this.authService.getAuth()
-                              .subscribe((auth) => this.dbxAuth = auth);
-      if (this.dbxAuth.isAuth) {
+    this.subscription = this.authService.getAuth()
+                            .subscribe((auth) => this.dbxAuth = auth);
 
-          const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-          dbx.filesListFolder({ path: '' })
-              .then(function (response) {
-                  console.log(response);
-              })
-              .catch(function (error) {
-                  console.log(error);
-              });
-      }
-  }
+    if (!this.dbxAuth.isAuth) {
+        this.router.navigate(['/auth']);
+    }
+}
 
   search(event) {
     this.router.navigate(['/search']);
@@ -58,17 +54,19 @@ export class SearchComponent implements OnInit, OnDestroy {
 
 
       };
-      if (this.dbxAuth.isAuth) {
+
         const tmp = this.http.post('https://api.dropboxapi.com/2/files/search', payload, httpOptions);
         tmp.subscribe((results: any) => {
           console.log(results);
           this.getMatches(results.matches);
+          const numbers = results.matches.length;
+          this.matches = numbers;
+          this.gotMatch = true;
      },
       error => {
         console.error('error', error);
       });
       return tmp;
-  }
   }
 
   getMatches (obj: Array<any>) {

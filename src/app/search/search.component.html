@@ -1,9 +1,4 @@
-<p>
-  search works!
-</p>
-
-<!--Test purpose only-->
-<div *ngIf="authService.isAuth">
+<div *ngIf="this.dbxAuth.isAuth">
   <form #form="ngForm" class="form-group">
     <label for="username">Search</label>
       <input class="form-control"
@@ -17,8 +12,17 @@
     </form>
 </div> 
 
+<div *ngIf="gotMatch"> {{'We found '+ matches + ' matches of your results' }}</div>
 <div *ngFor="let match of compMatches">
- {{ match.metadata.name }}
+  <ng-template *ngIf="match.metadata['.tag'] === 'folder';then thenBlock; else elseBlock">
+  </ng-template>
+  <ng-template #thenBlock>
+      <a href="/?path={{match.metadata.path_lower}}">{{ match.metadata.name }}</a>
+  </ng-template>
+
+  <ng-template #elseBlock>
+      {{ match.metadata.name }}
+    </ng-template>
 </div>
 
 <a href="/?path=cata">View this folder</a>
