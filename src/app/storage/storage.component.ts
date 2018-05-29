@@ -12,7 +12,7 @@ import { DbxAuth } from '../configs';
 })
 export class StorageComponent implements OnInit, OnDestroy {
   @Input() path: string;
-
+  thumb;
   private dbxAuth: DbxAuth;
   private subscription: Subscription;
   private compEntries: Array<any> = [];
@@ -38,13 +38,32 @@ export class StorageComponent implements OnInit, OnDestroy {
           console.log(error);
         });
       // ------ End of your code ------
+      dbx.filesGetThumbnail({ path: '/fka_twigs_lg.jpg'})
+        .then((data) => {
+          console.log(data);
+          this.thumb = data.path_display;
+          document.getElementById('bild').setAttribute('src', data.path_lower);
+        });
     }
   }
-  downloadFile() {
+  previewFile(event) {
+    console.log(event.target.innerText);
+  }
+  downloadFile(filepath, filename, event) {
+    event.preventDefault();
     const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-    dbx.filesGetTemporaryLink({ path: '/Bok1.xlsx' })
-      .then((response) => {
-        console.log(response.link);
+    // const loca = filepath;
+    dbx.filesDownload({ path: filepath})
+      .then((data) => {
+        console.log(data);
+       // const theblob = new Blob([response.fileBlob], { type: 'application/octet-stream'});
+        const fileurl = URL.createObjectURL((<any>data).fileBlob);
+        const a = document.createElement('a');
+        a.setAttribute('href', fileurl);
+        a.setAttribute('download', filename);
+        a.click();
+        // window.open(url, '_blank');
+
         // this.fileService.downloadFile(response.link);
       })
       .catch((error) => {
