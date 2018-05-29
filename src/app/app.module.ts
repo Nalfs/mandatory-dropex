@@ -14,6 +14,7 @@ import { StorageComponent } from './storage/storage.component';
 import { LogoutComponent } from './logout/logout.component';
 import { SearchComponent } from './search/search.component';
 import { UploadComponent } from './upload/upload.component';
+import { PathComponent } from './path/path.component';
 
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
@@ -31,7 +32,8 @@ const appRoutes = [
     StorageComponent,
     LogoutComponent,
     SearchComponent,
-    UploadComponent
+    UploadComponent,
+    PathComponent
   ],
   imports: [
     BrowserModule,
