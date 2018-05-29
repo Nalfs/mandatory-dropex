@@ -8,15 +8,18 @@ export class DropexService {
 
     paths = [];
     stream;
+    observer;
 
     constructor() {
-        this.stream = new Observable<any>(() => {
+        this.stream = new Observable<any>((observer) => {
+            this.observer = observer;
         });
     }
 
     addPath(url) {
         this.paths.push(url);
         this.stream.next(url);
+
     }
 
     getCurrentPath() {
