@@ -44,7 +44,6 @@ export class UploadComponent implements OnInit {
     const path = (this.currentPath) ? this.currentPath : '/';
     const paths = this.file.name.split('\\');
     const filename = paths.pop();
-
     const payload = {
       path: `${path}${filename}`,
       mode: 'add',

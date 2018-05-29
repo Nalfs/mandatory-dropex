@@ -12,6 +12,8 @@ export class PathComponent implements OnInit {
 
    routes;
 
+   // breadcrumb component, show paths. to be implemented.
+
    ngOnInit() {
     this.dropexService.stream.subscribe((routes) => {
         this.routes = routes;

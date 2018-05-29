@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
-import { DropexService } from './../dropex.service';
 
 import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
@@ -19,7 +18,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     private currentPath = getParamFromUrl('path');
 
-    constructor(private authService: AuthService, private dropexService: DropexService, private router: Router) { }
+    constructor(private authService: AuthService, private router: Router) { }
 
     ngOnInit() {
         this.subscription = this.authService.getAuth()
@@ -33,10 +32,6 @@ export class BoardComponent implements OnInit, OnDestroy {
             // Do stuff here
         }
         console.log('boardComp', 'currentPath', this.currentPath); // For testing purpose
-    }
-
-    clickNewUrl(url) {
-        this.dropexService.addPath(url);
     }
 
     ngOnDestroy() {
