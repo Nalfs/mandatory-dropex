@@ -42,9 +42,18 @@ export class StorageComponent implements OnInit, OnDestroy {
   }
   downloadFile() {
     const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-    dbx.filesGetTemporaryLink({ path: '/Bok1.xlsx' })
-      .then((response) => {
-        console.log(response.link);
+    const filepath = '/bok1.xlsx';
+    dbx.filesDownload({ path: filepath})
+      .then((data) => {
+        console.log(data);
+       // const theblob = new Blob([response.fileBlob], { type: 'application/octet-stream'});
+        const fileurl = URL.createObjectURL((<any>data).fileBlob);
+        const a = document.createElement('a');
+        a.setAttribute('href', fileurl);
+        a.setAttribute('download', 'bok1.xlsx');
+        a.click();
+        // window.open(url, '_blank');
+
         // this.fileService.downloadFile(response.link);
       })
       .catch((error) => {
