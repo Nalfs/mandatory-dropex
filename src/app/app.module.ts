@@ -13,6 +13,7 @@ import { BoardComponent } from './board/board.component';
 import { StorageComponent } from './storage/storage.component';
 import { LogoutComponent } from './logout/logout.component';
 import { SearchComponent } from './search/search.component';
+import { UploadComponent } from './upload/upload.component';
 
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
@@ -28,7 +29,8 @@ const appRoutes = [
     BoardComponent,
     StorageComponent,
     LogoutComponent,
-    SearchComponent
+    SearchComponent,
+    UploadComponent
   ],
   imports: [
     BrowserModule,
