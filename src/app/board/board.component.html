@@ -10,7 +10,24 @@
 </ng-template>
 
 <ng-template #elseBlock>
-    <app-storage [path]="currentPath"></app-storage>
+    <div class="row">
+        <ul class="nav flex-column">
+            <li class="nav-item nav-bar-brand"><i class="fab fa-dropbox fa-3x"></i></li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Active</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+            </li>
+        </ul>
+        <app-storage [path]="currentPath"></app-storage>
+    </div>
     <app-search></app-search>
     <a routerLink="/logout" routerLinkActive="active">Logout</a>
     <app-upload [currentPath]="currentPath"></app-upload>

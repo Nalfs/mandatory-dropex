@@ -12,7 +12,8 @@ import { DbxAuth } from '../configs';
 })
 export class StorageComponent implements OnInit, OnDestroy {
   @Input() path: string;
-  thumb;
+  storageSpace;
+  imgUrl;
   private dbxAuth: DbxAuth;
   private subscription: Subscription;
   private compEntries: Array<any> = [];
@@ -28,28 +29,27 @@ export class StorageComponent implements OnInit, OnDestroy {
       // ------ Beginning your code ------
       const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
       const localPath = this.path ? '/' + this.path : '';
+      dbx.usersGetSpaceUsage()
+        .then(userInfo => {
+          console.log(userInfo);
+          this.storageSpace = (userInfo.used / 1024 / 1024 / 1024).toFixed(2);
+        });
 
       dbx.filesListFolder({ path: localPath })
         .then(response => {
           this.getEntries(response.entries);
-          dbx.filesGetThumbnail({ path: response.entries[10].path_display, format: 'jpeg', size: 'w64h64' })
+          /* dbx.filesGetThumbnail({ path: response.entries[10].path_display, format: 'jpeg', size: 'w64h64' })
             .then((result) => {
               console.log(result);
               const fileUrl = URL.createObjectURL(result.fileBlob);
               document.getElementById('bild').setAttribute('src', fileUrl);
-            });
+            }); */
           console.log(response.entries[0]['.tag']);
         })
         .catch(error => {
           console.log(error);
         });
       // ------ End of your code ------
-      /* dbx.filesGetThumbnail({ path: '/fka_twigs_lg.jpg'})
-        .then((data) => {
-          console.log(data);
-          this.thumb = data.path_display;
-          document.getElementById('bild').setAttribute('src', data.path_lower);
-        }); */
     }
   }
 
@@ -83,6 +83,22 @@ export class StorageComponent implements OnInit, OnDestroy {
     console.log('storageComp-get entries outside', this.compEntries);
   }
 
+  isImage(fileName: string) {
+    const supportedImages = ['jpg', 'jpeg', 'png', 'tiff', 'tif', 'gif', 'bmp'];
+    const fileEnding = fileName.split('.').pop();
+    if (supportedImages.some(imgType => imgType === fileEnding)) {
+      return true;
+    }
+  }
+  getThumbnail(imagePath) {
+    const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+    dbx.filesGetThumbnail({ path: imagePath, format: 'jpeg', size: 'w64h64' })
+      .then((result) => {
+        console.log(result);
+        this.imgUrl = URL.createObjectURL(result.fileBlob);
+        // document.getElementById('testbild').setAttribute('src', this.imgUrl);
+    });
+  }
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
