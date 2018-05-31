@@ -74,6 +74,24 @@ export class SearchComponent implements OnInit, OnDestroy {
     console.log('what is this', this.compMatches);
   }
 
+  downloadFile(filepath, filename, event) {
+    event.preventDefault();
+    const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+
+    dbx.filesDownload({ path: filepath})
+      .then((data) => {
+        console.log(data);
+        const fileurl = URL.createObjectURL((<any>data).fileBlob);
+        const a = document.createElement('a');
+        a.setAttribute('href', fileurl);
+        a.setAttribute('download', filename);
+        a.click();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   ngOnDestroy() {
       this.subscription.unsubscribe();
   }
