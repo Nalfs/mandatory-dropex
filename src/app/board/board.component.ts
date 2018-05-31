@@ -16,11 +16,12 @@ import { getParamFromUrl } from '../utils';
 export class BoardComponent implements OnInit, OnDestroy {
     private dbxAuth: DbxAuth;
     private subscription: Subscription;
-    private currentPath = getParamFromUrl('path');
+    public currentPath = getParamFromUrl('path');
 
     constructor(private authService: AuthService, private router: Router) { }
 
     ngOnInit() {
+        console.log('you are here ', this.currentPath);
         this.subscription = this.authService.getAuth()
                                 .subscribe((auth) => this.dbxAuth = auth);
 

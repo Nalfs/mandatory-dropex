@@ -71,7 +71,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   getMatches (obj: Array<any>) {
     this.compMatches = obj;
-    console.log(this.compMatches);
+    console.log('what is this', this.compMatches);
   }
 
   ngOnDestroy() {
