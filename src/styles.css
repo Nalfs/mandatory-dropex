@@ -1,2 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
 @import url(https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css);
+@import url(https://use.fontawesome.com/releases/v5.0.13/css/all.css);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 300;
+}
+.nav {
+  background-color: #1e181a;
+  text-align: center;
+}
+.nav-link {
+  color: #afb0af;
+}
+.active {
+  background-color: #323031
+}
+.fa-dropbox {
+  color: /* #787878; */ hotpink;
+  padding: 15px;
+
+}
+i {
+  margin-right: 15px;
+}
+td a, td a:link {
+  text-decoration: none;
+  color: inherit;
+}
+a, i {
+  vertical-align: middle;
+}
+.table {
+  color: #7e7e7e;
+  background-color: #f9f9f9;
+}
+tr:hover {
+  background-color: #c9c9c94d;
+}
+.fa-folder {
+  color: #00aeff99;
+}
+
+.col-sm {
+  border-bottom: 1px solid #80808080;
+  padding: 15px;
+}
