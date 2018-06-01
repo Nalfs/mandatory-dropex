@@ -19,7 +19,7 @@
   background-color: #323031
 }
 .fa-dropbox {
-  color: /* #787878; */ hotpink;
+  color: #787878;
   padding: 15px;
 
 }
@@ -37,7 +37,7 @@ a, i {
   color: #7e7e7e;
   background-color: #f9f9f9;
 }
-tr:hover {
+tbody > tr:hover {
   background-color: #c9c9c94d;
 }
 .fa-folder {

@@ -13,10 +13,12 @@ import { DbxAuth } from '../configs';
 export class StorageComponent implements OnInit, OnDestroy {
   @Input() path: string;
   storageSpace;
+  usedSpace;
   imgUrl;
   private dbxAuth: DbxAuth;
   private subscription: Subscription;
   private compEntries: Array<any> = [];
+  private imgEntries: Array<any> = [];
 
   constructor(private authService: AuthService) {}
 
@@ -29,10 +31,14 @@ export class StorageComponent implements OnInit, OnDestroy {
       // ------ Beginning your code ------
       const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
       const localPath = this.path ? '/' + this.path : '';
-      dbx.usersGetSpaceUsage()
-        .then(userInfo => {
-          console.log(userInfo);
-          this.storageSpace = (userInfo.used / 1024 / 1024 / 1024).toFixed(2);
+      // FIx
+      dbx.usersGetSpaceUsage(null)
+        .then(spaceInfo => {
+          console.log(spaceInfo);
+          this.storageSpace = (spaceInfo.allocation.allocated / 1024 / 1024 / 1024).toFixed(2);
+        })
+        .catch((error) => {
+          console.log(error);
         });
 
       dbx.filesListFolder({ path: localPath })
@@ -48,6 +54,11 @@ export class StorageComponent implements OnInit, OnDestroy {
         })
         .catch(error => {
           console.log(error);
+        });
+      const entries = {entries: [{ path: '/hallf', format: 'jpeg', size: 'w64h64' }]};
+      dbx.filesGetThumbnailBatch(entries)
+        .then((batch) => {
+          console.log(batch);
         });
       // ------ End of your code ------
     }
@@ -77,6 +88,9 @@ export class StorageComponent implements OnInit, OnDestroy {
         console.log(error);
       });
   }
+  getImages() {
+
+  }
 
   getEntries(inEntries: Array<any>) {
     this.compEntries = inEntries;
@@ -90,7 +104,31 @@ export class StorageComponent implements OnInit, OnDestroy {
       return true;
     }
   }
-  getThumbnail(imagePath) {
+  getFileType(fileName: string) {
+    const fileEnding = fileName.split('.').pop();
+    let fileType;
+    switch (fileEnding) {
+      case 'pdf':
+        fileType = 'fas fa-file-pdf fa-2x';
+        break;
+      case ('docx' || 'docx'):
+        fileType = 'fas fa-file-word fa-2x';
+        break;
+      case 'pptx':
+        fileType = 'fas fa-file-powerpoint fa-2x';
+        break;
+      case 'xlsx':
+        fileType = 'fas fa-file-excel fa-2x';
+        break;
+      case ('html' || 'js'):
+        fileType = 'fas fa-file-code fa-2x';
+        break;
+      default:
+        fileType = 'fa fa-file fa-2x';
+    }
+    return fileType;
+  }
+  /* getThumbnail(imagePath) {
     const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
     dbx.filesGetThumbnail({ path: imagePath, format: 'jpeg', size: 'w64h64' })
       .then((result) => {
@@ -98,7 +136,7 @@ export class StorageComponent implements OnInit, OnDestroy {
         this.imgUrl = URL.createObjectURL(result.fileBlob);
         // document.getElementById('testbild').setAttribute('src', this.imgUrl);
     });
-  }
+  } */
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

@@ -1,6 +1,6 @@
 <p>
   storage component works! Don't click if you don't want to download {{ storageSpace }} Gb worth of Nadim's pr0n
-</p>
+</p> 
 <!-- <ul class="list-group">
   <li class="list-group-item" *ngFor="let entry of compEntries">{{ entry['.tag'] }}</li>
 </ul> -->
@@ -34,7 +34,8 @@
           <td>
             <div>
               <img *ngIf="isImage(item.path_display)" [src]="imgUrl" alt="bild" width="64" id='testbild'>
-              <i *ngIf="!isImage(item.name)" class="fa fa-file fa-2x"></i>
+              <!-- <i *ngIf="!isImage(item.name)" class="fa fa-file fa-2x"></i> -->
+              <i *ngIf="!isImage(item.name)" [ngClass]="getFileType(item.name)"></i>
               <a (click)="downloadFile(item.path_lower, item.name, $event)" href="">
                 <span>{{ item.name }}</span>
               </a>
