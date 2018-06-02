@@ -1,7 +1,11 @@
 
 <ul>
-     <li>Navigation: <a href="">{{ '' ? 'Home' : 'Home' }}</a>
-    <a *ngFor="let path of pathArray" href="/?path={{path.fullpath}}">{{path.path}}/</a></li>
+     <li>Navigation <a href="">{{ '' ? 'Home' : 'Home' }}</a>
+            <a *ngFor="let path of pathArray" href="/?path={{path.fullpath}}">{{path.path}}/</a>
+    </li>
+    <li>
+            <a *ngIf="parentFolder.length > 0" href="/?path={{ parentFolder[parentFolder.length - 1].fullpath }}"> Up</a>
+    </li>
 </ul>
 <ng-template *ngIf="!dbxAuth.isAuth; then thenBlock; else elseBlock"></ng-template>    
 

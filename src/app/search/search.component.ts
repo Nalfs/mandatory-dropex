@@ -20,6 +20,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     public query;
     public matches = 0;
     public gotMatch = false;
+    question;
+    lastItem = [];
+    lastSearch;
 
   constructor(private authService: AuthService,
               private http: HttpClient,
@@ -35,7 +38,19 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (!this.dbxAuth.isAuth) {
         this.router.navigate(['/auth']);
     }
-}
+
+    if (sessionStorage.getItem('lastSearches') !== null) {
+
+      this.lastSearch = JSON.parse(sessionStorage.getItem('lastSearches'));
+      console.log('this is' , this.lastSearch);
+      this.lastSearch = this.lastSearch.slice(-3);
+      console.log('this is second' , this.lastSearch[1].searchterm);
+      /* let i;
+       for (i = 0; i < this.lastSearch.length; i++) {
+         console.log('boom', this.lastSearch[i].metadata.name);
+       } */
+    }
+  }
 
   search(event) {
     this.router.navigate(['/search']);
@@ -46,6 +61,7 @@ export class SearchComponent implements OnInit, OnDestroy {
             'Content-Type': 'application/json',
         })
       };
+      this.question = this.query;
 
       const payload = {
         'path': '',
@@ -71,7 +87,11 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   getMatches (obj: Array<any>) {
     this.compMatches = obj;
-    console.log('what is this', this.compMatches);
+    console.log(this.compMatches);
+    const save = this.compMatches;
+    save.forEach(function(e) { e.searchterm = this.question; }, this);
+    console.log(save);
+    sessionStorage.setItem('lastSearches', JSON.stringify(save));
   }
 
   downloadFile(filepath, filename, event) {
