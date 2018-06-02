@@ -31,11 +31,11 @@ export class StorageComponent implements OnInit, OnDestroy {
       // ------ Beginning your code ------
       const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
       const localPath = this.path ? '/' + this.path : '';
-      // FIx
+      const entries = {entries: [{ path: '/appar/', format: 'jpeg', size: 'w64h64' }]};
       dbx.usersGetSpaceUsage(null)
         .then(spaceInfo => {
           console.log(spaceInfo);
-          this.storageSpace = (spaceInfo.allocation.allocated / 1024 / 1024 / 1024).toFixed(2);
+          this.storageSpace = (spaceInfo.used / 1024 / 1024 / 1024).toFixed(2);
         })
         .catch((error) => {
           console.log(error);
@@ -43,22 +43,23 @@ export class StorageComponent implements OnInit, OnDestroy {
 
       dbx.filesListFolder({ path: localPath })
         .then(response => {
+          console.log(response);
           this.getEntries(response.entries);
-          /* dbx.filesGetThumbnail({ path: response.entries[10].path_display, format: 'jpeg', size: 'w64h64' })
-            .then((result) => {
-              console.log(result);
-              const fileUrl = URL.createObjectURL(result.fileBlob);
-              document.getElementById('bild').setAttribute('src', fileUrl);
-            }); */
-          console.log(response.entries[0]['.tag']);
+          for (const entry of response.entries) {
+            if (this.isImage(entry.path_lower)) {
+              dbx.filesGetThumbnail({ path: entry.path_lower })
+                .then((result) => {
+                  const fileUrl = URL.createObjectURL(result.fileBlob);
+                  document.getElementById(entry.path_lower).setAttribute('src', fileUrl);
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+            }
+          }
         })
         .catch(error => {
           console.log(error);
-        });
-      const entries = {entries: [{ path: '/hallf', format: 'jpeg', size: 'w64h64' }]};
-      dbx.filesGetThumbnailBatch(entries)
-        .then((batch) => {
-          console.log(batch);
         });
       // ------ End of your code ------
     }
@@ -70,26 +71,21 @@ export class StorageComponent implements OnInit, OnDestroy {
   downloadFile(filepath, filename, event) {
     event.preventDefault();
     const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-    // const loca = filepath;
     dbx.filesDownload({ path: filepath})
       .then((data) => {
         console.log(data);
-       // const theblob = new Blob([response.fileBlob], { type: 'application/octet-stream'});
         const fileurl = URL.createObjectURL((<any>data).fileBlob);
         const a = document.createElement('a');
+        if (this.isImage(data.path_lower)) {
+          console.log('is image');
+        }
         a.setAttribute('href', fileurl);
         a.setAttribute('download', filename);
         a.click();
-        // window.open(url, '_blank');
-
-        // this.fileService.downloadFile(response.link);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
-  getImages() {
-
   }
 
   getEntries(inEntries: Array<any>) {
@@ -104,6 +100,7 @@ export class StorageComponent implements OnInit, OnDestroy {
       return true;
     }
   }
+
   getFileType(fileName: string) {
     const fileEnding = fileName.split('.').pop();
     let fileType;

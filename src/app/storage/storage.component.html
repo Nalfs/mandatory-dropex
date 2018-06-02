@@ -33,8 +33,9 @@
         <ng-template #elseBlock>
           <td>
             <div>
-              <img *ngIf="isImage(item.path_display)" [src]="imgUrl" alt="bild" width="64" id='testbild'>
-              <!-- <i *ngIf="!isImage(item.name)" class="fa fa-file fa-2x"></i> -->
+              <img *ngIf="isImage(item.path_lower)" 
+                    alt="bild" width="32" height="32" 
+                    [id]="item.path_lower" class="thumbnail">
               <i *ngIf="!isImage(item.name)" [ngClass]="getFileType(item.name)"></i>
               <a (click)="downloadFile(item.path_lower, item.name, $event)" href="">
                 <span>{{ item.name }}</span>

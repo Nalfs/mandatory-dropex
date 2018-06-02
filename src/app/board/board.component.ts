@@ -16,11 +16,14 @@ import { getParamFromUrl } from '../utils';
 export class BoardComponent implements OnInit, OnDestroy {
     private dbxAuth: DbxAuth;
     private subscription: Subscription;
-    private currentPath = getParamFromUrl('path');
+    public currentPath = getParamFromUrl('path');
+    pathArray;
+    link;
 
     constructor(private authService: AuthService, private router: Router) { }
 
     ngOnInit() {
+        this.pathArray = this.getPathArr(this.currentPath);
         this.subscription = this.authService.getAuth()
                                 .subscribe((auth) => this.dbxAuth = auth);
 
@@ -32,6 +35,30 @@ export class BoardComponent implements OnInit, OnDestroy {
             // Do stuff here
         }
         console.log('boardComp', 'currentPath', this.currentPath); // For testing purpose
+    }
+
+
+    getPathArr(currentPath) {
+        const newPathArr = currentPath.split('/');
+        const arrThree = [];
+        let lastValue = '';
+        console.log('this is the: ', currentPath, newPathArr);
+       let i;
+        for (i = 0; i < newPathArr.length; i++) {
+            if (newPathArr[i]) {
+                lastValue += `/${newPathArr[i]}`;
+            }
+          arrThree.push({
+               path: newPathArr[i],
+               fullpath: lastValue
+            });
+            }
+            return arrThree;
+    }
+
+    navigate(arrThree) {
+        console.log('hello', arrThree);
+        return arrThree;
     }
 
     ngOnDestroy() {

@@ -1,8 +1,8 @@
-<!-- <p>
-  board component works!
-</p> -->
 
-
+<ul>
+     <li>Navigation: <a href="">{{ '' ? 'Home' : 'Home' }}</a>
+    <a *ngFor="let path of pathArray" href="/?path={{path.fullpath}}">{{path.path}}/</a></li>
+</ul>
 <ng-template *ngIf="!dbxAuth.isAuth; then thenBlock; else elseBlock"></ng-template>    
 
 <ng-template #thenBlock>

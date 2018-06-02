@@ -21,8 +21,6 @@
   </ng-template>
 
   <ng-template #elseBlock>
-      {{ match.metadata.name }}
+      <a (click)="downloadFile(match.metadata.path_lower, match.metadata.name, $event)" href=""> {{ match.metadata.name }} </a>
     </ng-template>
 </div>
-
-<a href="/?path=cata">View this folder</a>
