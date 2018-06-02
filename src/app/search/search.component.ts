@@ -23,6 +23,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     question;
     lastItem = [];
     lastSearch;
+    showLastSearch = false;
 
   constructor(private authService: AuthService,
               private http: HttpClient,
@@ -40,7 +41,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     if (sessionStorage.getItem('lastSearches') !== null) {
-
+      this.showLastSearch = !this.showLastSearch;
       this.lastSearch = JSON.parse(sessionStorage.getItem('lastSearches'));
       console.log('this is' , this.lastSearch);
       this.lastSearch = this.lastSearch.slice(-3);

@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="showLastSearch">
   <h3>Your last searchterm & search results</h3>
   Keyword: {{lastSearch[0].searchterm}}
   <div *ngFor="let search of lastSearch">{{search.metadata.name}}</div>
