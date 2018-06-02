@@ -19,11 +19,15 @@ export class BoardComponent implements OnInit, OnDestroy {
     public currentPath = getParamFromUrl('path');
     pathArray;
     link;
+    backLink;
+    goBack;
+    parentFolder;
 
     constructor(private authService: AuthService, private router: Router) { }
 
     ngOnInit() {
         this.pathArray = this.getPathArr(this.currentPath);
+        this.goBack = this.goBackFn(this.currentPath);
         this.subscription = this.authService.getAuth()
                                 .subscribe((auth) => this.dbxAuth = auth);
 
@@ -54,8 +58,11 @@ export class BoardComponent implements OnInit, OnDestroy {
             });
             }
             return arrThree;
-    }
+        }
 
+    goBackFn(currentPath) {
+        return this.parentFolder = this.pathArray.slice(0, -1);
+    }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
