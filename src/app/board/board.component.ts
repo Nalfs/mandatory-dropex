@@ -56,10 +56,6 @@ export class BoardComponent implements OnInit, OnDestroy {
             return arrThree;
     }
 
-    navigate(arrThree) {
-        console.log('hello', arrThree);
-        return arrThree;
-    }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
