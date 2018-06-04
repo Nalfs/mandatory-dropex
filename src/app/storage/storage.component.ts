@@ -48,7 +48,8 @@ export class StorageComponent implements OnInit, OnDestroy {
           for (const entry of response.entries) {
             if (this.isImage(entry.path_lower)) {
               dbx.filesGetThumbnail({ path: entry.path_lower })
-                .then((result) => {
+                .then((result: any) => {
+                  /* tslint:disable-next-line */
                   const fileUrl = URL.createObjectURL(result.fileBlob);
                   document.getElementById(entry.path_lower).setAttribute('src', fileUrl);
                 })

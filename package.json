@@ -1,5 +1,5 @@
 {
-  "name": "angular-dropbox",
+  "name": "1.0.0",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
@@ -45,5 +45,17 @@
     "ts-node": "^6.0.5",
     "tslint": "~5.10.0",
     "typescript": "~2.7.2"
-  }
+  },
+  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) v6.0.3. You may want to know about how you can [start here](ANGULAR.md)  and view [online demo here](https://nguyenkhois.github.io/mandatory-dropex/dist).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyenkhois/mandatory-dropex.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nguyenkhois/mandatory-dropex/issues"
+  },
+  "homepage": "https://github.com/nguyenkhois/mandatory-dropex#readme"
 }
