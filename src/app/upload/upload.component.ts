@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
+import { NullTemplateVisitor } from '@angular/compiler';
 
 @Component({
   selector: 'app-upload',
@@ -20,10 +21,10 @@ export class UploadComponent implements OnInit {
     private subscription: Subscription;
     @Input() currentPath;
 
-    file = {
+     files;
+     filename = {
       name: ''
-    };
-
+     };
 
     constructor(private authService: AuthService,
                 private http: HttpClient,
@@ -38,29 +39,34 @@ export class UploadComponent implements OnInit {
             }
 
 
-  upload() {
 
+  storeFiles(files) {
+    this.files = files;
+  }
+
+  upload() {
    // const filepath  = this.dropexService.getCurrentPath();
     const filepath = this.currentPath;
-    const name = this.file.name.split('\\').pop();
-    const payload = {
+    /*  */
+    const name = this.filename.name.split('\\').pop();
+    const arg = {
       path: filepath + '/' + name,
       mode: 'add',
       autorename: true,
       mute: false
-        };
-        console.log(payload.path, this.currentPath);
+      };
+
       let httpOptions;
           httpOptions = {
           headers: new HttpHeaders({
               'Authorization': 'Bearer ' + this.dbxAuth.accessToken,
-              'Dropbox-API-Arg': JSON.stringify(payload),
+              'Dropbox-API-Arg': JSON.stringify(arg),
               'Content-Type': 'application/octet-stream'
           })
         };
 
         console.log(httpOptions);
-          const send = this.http.post('https://content.dropboxapi.com/2/files/upload', payload, httpOptions);
+          const send = this.http.post('https://content.dropboxapi.com/2/files/upload', this.files.item(0), httpOptions);
           send.subscribe((results: any) => {
             alert('Your upload was successfull.');
        },

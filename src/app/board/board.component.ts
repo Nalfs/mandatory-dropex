@@ -31,13 +31,13 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.subscription = this.authService.getAuth()
                                 .subscribe((auth) => this.dbxAuth = auth);
 
-        if (!this.dbxAuth.isAuth) {
+        /* if (!this.dbxAuth.isAuth) {
             console.log('boardComp', 'You are not logged in!', this.dbxAuth.isAuth); // For testing purpose
             this.router.navigate(['/auth']);
         } else {
             console.log('boardComp', 'You are logged in!', this.dbxAuth.isAuth); // For testing purpose
             // Do stuff here
-        }
+        } */
         console.log('boardComp', 'currentPath', this.currentPath); // For testing purpose
     }
 

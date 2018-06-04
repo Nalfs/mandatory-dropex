@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { CanActivate, Router } from '@angular/router';
 
 import { DbxAuth } from './configs';
 import { storeCredentials,
@@ -14,7 +15,7 @@ export class AuthService {
     private dbxAuth: DbxAuth = {...this.dbxAuth, isAuth: false}; // Set initial value isAuth: false
     private objBehaviorSubject: BehaviorSubject<any>;
 
-    constructor() {
+    constructor(public router: Router) {
         this.objBehaviorSubject = new BehaviorSubject(this.dbxAuth);
 
         // Get back saved credentials
@@ -39,4 +40,14 @@ export class AuthService {
         clearCredentials();
         return this.objBehaviorSubject.next(this.dbxAuth);
     }
+
+    canActivate(): boolean {
+        if (!this.dbxAuth.isAuth) {
+          this.router.navigate(['/auth']);
+          console.log('boardComp', 'You are not logged in!');
+          return false;
+        }
+        console.log('boardComp', 'You are not logged in!');
+        return true;
+      }
 }
