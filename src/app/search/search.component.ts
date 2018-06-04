@@ -36,9 +36,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.subscription = this.authService.getAuth()
                             .subscribe((auth) => this.dbxAuth = auth);
 
-    if (!this.dbxAuth.isAuth) {
+    /* if (!this.dbxAuth.isAuth) {
         this.router.navigate(['/auth']);
-    }
+    } */
 
     if (sessionStorage.getItem('lastSearches') !== null) {
       this.showLastSearch = !this.showLastSearch;

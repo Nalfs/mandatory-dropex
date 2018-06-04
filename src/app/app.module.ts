@@ -19,9 +19,9 @@ import { FilesizePipe } from './filesize.pipe';
 
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
-    { path: 'logout', component: LogoutComponent },
-    { path: 'search', component: SearchComponent },
-    { path: '', component: BoardComponent }
+    { path: 'logout', component: LogoutComponent},
+    { path: 'search', component: SearchComponent, canActivate: [AuthService] },
+    { path: '', component: BoardComponent, canActivate: [AuthService] }
 ];
 
 @NgModule({

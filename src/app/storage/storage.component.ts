@@ -27,7 +27,7 @@ export class StorageComponent implements OnInit, OnDestroy {
       .getAuth()
       .subscribe(auth => (this.dbxAuth = auth));
 
-    if (this.dbxAuth.isAuth) {
+    /* if (this.dbxAuth.isAuth) { */
       // ------ Beginning your code ------
       const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
       const localPath = this.path ? '/' + this.path : '';
@@ -48,9 +48,8 @@ export class StorageComponent implements OnInit, OnDestroy {
           for (const entry of response.entries) {
             if (this.isImage(entry.path_lower)) {
               dbx.filesGetThumbnail({ path: entry.path_lower })
-                .then((result: any) => {
-                  /* tslint:disable-next-line */
-                  const fileUrl = URL.createObjectURL(result.fileBlob);
+                .then((result) => {
+                  const fileUrl = URL.createObjectURL((<any> result).fileBlob);
                   document.getElementById(entry.path_lower).setAttribute('src', fileUrl);
                 })
                 .catch(error => {
@@ -63,7 +62,7 @@ export class StorageComponent implements OnInit, OnDestroy {
           console.log(error);
         });
       // ------ End of your code ------
-    }
+   /*  } */
   }
 
   previewFile(event) {
