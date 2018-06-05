@@ -26,7 +26,7 @@
 i, .thumbnail {
   margin-right: 15px;
 }
-td a, td a:link {
+td a, td a:link a:visited  {
   text-decoration: none;
   color: inherit;
 }
@@ -47,4 +47,19 @@ tbody > tr:hover {
 .col-sm {
   border-bottom: 1px solid #80808080;
   padding: 15px;
+}
+tr .fav {
+  margin-left: 5px;
+  vertical-align: middle;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+}
+tr:hover .fav {
+  opacity: 1;
+}
+.starred {
+  margin-left: 5px;
+  vertical-align: middle;
+  color: blue;
+  opacity: 1;
 }

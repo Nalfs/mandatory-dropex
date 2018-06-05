@@ -15,10 +15,11 @@ export class StorageComponent implements OnInit, OnDestroy {
   storageSpace;
   usedSpace;
   imgUrl;
+  isStarred = false;
+  starredItems = [];
   private dbxAuth: DbxAuth;
   private subscription: Subscription;
   private compEntries: Array<any> = [];
-  private imgEntries: Array<any> = [];
 
   constructor(private authService: AuthService) {}
 
@@ -40,7 +41,6 @@ export class StorageComponent implements OnInit, OnDestroy {
         .catch((error) => {
           console.log(error);
         });
-
       dbx.filesListFolder({ path: localPath })
         .then(response => {
           console.log(response);
@@ -49,7 +49,7 @@ export class StorageComponent implements OnInit, OnDestroy {
             if (this.isImage(entry.path_lower)) {
               dbx.filesGetThumbnail({ path: entry.path_lower })
                 .then((result) => {
-                  const fileUrl = URL.createObjectURL(result.fileBlob);
+                  const fileUrl = URL.createObjectURL((<any> result).fileBlob);
                   document.getElementById(entry.path_lower).setAttribute('src', fileUrl);
                 })
                 .catch(error => {
@@ -84,12 +84,31 @@ export class StorageComponent implements OnInit, OnDestroy {
         a.click();
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }
 
   getEntries(inEntries: Array<any>) {
     this.compEntries = inEntries;
+    if (localStorage.getItem('entries') !== null) {
+      // this.starredItems = JSON.parse(localStorage.getItem('entries')) || [];
+      for (let i = 0; i < this.compEntries.length; i++) {
+        this.compEntries[i].starred = checkStart(this.compEntries[i]);
+        console.log(checkStart(this.compEntries[i]));
+        /* for (let n = 0; n < this.starredItems.length; n++) {
+          if (this.compEntries[i].id === this.starredItems[n].id) {
+            this.compEntries[i].starred = true;
+          }
+        } */
+
+
+      }
+    } else {
+      for (const entry of this.compEntries) {
+        entry.starred = false;
+      }
+    }
+   // localStorage.setItem('entries', JSON.stringify(this.compEntries));
     console.log('storageComp-get entries outside', this.compEntries);
   }
 
@@ -125,16 +144,39 @@ export class StorageComponent implements OnInit, OnDestroy {
     }
     return fileType;
   }
-  /* getThumbnail(imagePath) {
-    const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-    dbx.filesGetThumbnail({ path: imagePath, format: 'jpeg', size: 'w64h64' })
-      .then((result) => {
-        console.log(result);
-        this.imgUrl = URL.createObjectURL(result.fileBlob);
-        // document.getElementById('testbild').setAttribute('src', this.imgUrl);
-    });
-  } */
+
+  addStar(id, event) {
+    event.preventDefault();
+    this.starredItems = JSON.parse(localStorage.getItem('entries')) || [];
+    /* this.compEntries.find(item => item.id === id).starred = true;
+    console.log(this.compEntries);
+    this.starredItems.push({id: id, starred: true}); */
+    const foundItem = this.compEntries.find(item => item.id === id) || {} ;
+    if (foundItem) {
+      console.log(foundItem);
+      foundItem.starred = true;
+      this.starredItems.push(foundItem);
+
+      localStorage.setItem('entries', JSON.stringify(this.starredItems));
+    }
+  }
+  delStar(id, event) {
+    event.preventDefault();
+   // this.compEntries = JSON.parse(localStorage.getItem('entries'));
+    this.starredItems = JSON.parse(localStorage.getItem('entries')) || [];
+    this.compEntries.find(item => item.id === id).starred = false;
+    this.starredItems = this.starredItems.filter(el => el.id !== id);
+    console.log(this.starredItems);
+    localStorage.setItem('entries', JSON.stringify(this.starredItems));
+  }
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+}
+
+function checkStart(inItem: any) {
+  const currentStartItems = JSON.parse(localStorage.getItem('entries'));
+  const results = currentStartItems.filter((item) => item.id === inItem.id)  || [];
+
+  return results.length > 0 ? true : false;
 }

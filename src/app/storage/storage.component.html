@@ -14,13 +14,25 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of compEntries">
+      <tr *ngFor="let item of compEntries; let i = index">
         <ng-template *ngIf="item['.tag'] === 'folder';then thenBlock; else elseBlock"></ng-template>
         <ng-template #thenBlock>
           <td>
             <div>
               <i class="fas fa-folder fa-2x"></i>
               <a href="/?path={{item.path_lower}}">{{ item.name }}</a>
+              <span *ngIf="!item.starred"
+                    [id]="item.id" 
+                    (click)="addStar(item.id, $event)"
+                    class="fav">
+                    &#9733;
+              </span>
+              <span *ngIf="item.starred"
+                    [id]="item.id" 
+                    (click)="delStar(item.id, $event)"
+                    class="starred">
+                    &#9733;
+              </span>
             </div>
           </td>
           <td>
@@ -40,6 +52,18 @@
               <a (click)="downloadFile(item.path_lower, item.name, $event)" href="">
                 <span>{{ item.name }}</span>
               </a>
+              <span *ngIf="!item.starred" 
+                    class="fav" 
+                    [id]="item.id" 
+                    (click)="addStar(item.id, $event)">
+                    &#9733;
+              </span>
+              <span *ngIf="item.starred"
+                    [id]="item.id" 
+                    (click)="delStar(item.id, $event)"
+                    class="starred">
+                    &#9733;
+              </span>
             </div>
           </td>
           <td>
