@@ -1,41 +1,45 @@
-
 <ul>
-     <li>Navigation <a href="">{{ '' ? 'Home' : 'Home' }}</a>
-            <a *ngFor="let path of pathArray" href="/?path={{path.fullpath}}">{{path.path}}/</a>
-    </li>
-    <li>
-            <a *ngIf="parentFolder.length > 0" href="/?path={{ parentFolder[parentFolder.length - 1].fullpath }}"> Up</a>
-    </li>
+  <li>Navigation
+    <a href="">{{ '' ? 'Home' : 'Home' }}</a>
+    <a *ngFor="let path of pathArray" href="/?path={{path.fullpath}}">{{path.path}}/</a>
+  </li>
+  <li>
+    <a *ngIf="parentFolder.length > 0" href="/?path={{ parentFolder[parentFolder.length - 1].fullpath }}"> Up</a>
+  </li>
 </ul>
-<ng-template *ngIf="!dbxAuth.isAuth; then thenBlock; else elseBlock"></ng-template>    
+<ng-template *ngIf="!dbxAuth.isAuth; then thenBlock; else elseBlock"></ng-template>
 
 <ng-template #thenBlock>
-    <a routerLink="/auth" routerLinkActive="active">Go to Auth</a>
+  <a routerLink="/auth" routerLinkActive="active">Go to Auth</a>
 </ng-template>
 
 <ng-template #elseBlock>
-    <div class="row">
-        <ul class="nav flex-column">
-            <li class="nav-item nav-bar-brand"><i class="fab fa-dropbox fa-3x"></i></li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Active</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-            </li>
-        </ul>
-        <app-storage [path]="currentPath"></app-storage>
-    </div>
-    <app-search></app-search>
-    <a routerLink="/logout" routerLinkActive="active">Logout</a>
-    <app-upload [currentPath]="currentPath"></app-upload>
+  <div class="row">
+    <ul class="nav flex-column">
+      <li class="nav-item nav-bar-brand">
+        <i class="fab fa-dropbox fa-3x"></i>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href=" "><i class="far fa-file"></i>Files</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="far fa-star"></i>Starred</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+    <app-storage [path]="currentPath"></app-storage>
+  </div>
+  <app-search></app-search>
+  <a routerLink="/logout" routerLinkActive="active">Logout</a>
+  <app-upload [currentPath]="currentPath"></app-upload>
 </ng-template>
 
 <!-- A example link -->
-<p><a href="/?path=my folder">View my folder in console</a></p>
+<p>
+  <a href="/?path=my folder">View my folder in console</a>
+</p>

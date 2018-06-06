@@ -9,7 +9,9 @@
   font-weight: 300;
 }
 .nav {
-  background-color: #1e181a;
+  width: 200px;
+  /*background-color: #444a64;*/
+  background: linear-gradient(#444a64,#000000e6);
   text-align: center;
 }
 .nav-link {
@@ -19,7 +21,7 @@
   background-color: #323031
 }
 .fa-dropbox {
-  color: #787878;
+  color: /*#787878*/#00b3fe;
   padding: 15px;
 
 }
@@ -30,15 +32,20 @@ td a, td a:link a:visited  {
   text-decoration: none;
   color: inherit;
 }
-a, i {
+.table thead th {
+  border-top: none;
+  padding-bottom: 3px;
+  padding-top: 1.5rem;
+}
+table a, table i {
   vertical-align: middle;
 }
 .table {
-  color: #7e7e7e;
-  background-color: #f9f9f9;
+  color: #5d5858;
+  background-color: /*#f9f9f9*/#fcfcfc66;
 }
 tbody > tr:hover {
-  background-color: #c9c9c94d;
+  background-color: #ebf3f61a;
 }
 .fa-folder {
   color: #00aeff99;

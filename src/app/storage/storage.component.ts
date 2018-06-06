@@ -93,8 +93,7 @@ export class StorageComponent implements OnInit, OnDestroy {
     if (localStorage.getItem('entries') !== null) {
       // this.starredItems = JSON.parse(localStorage.getItem('entries')) || [];
       for (let i = 0; i < this.compEntries.length; i++) {
-        this.compEntries[i].starred = checkStart(this.compEntries[i]);
-        console.log(checkStart(this.compEntries[i]));
+        this.compEntries[i].starred = checkStars(this.compEntries[i]);
         /* for (let n = 0; n < this.starredItems.length; n++) {
           if (this.compEntries[i].id === this.starredItems[n].id) {
             this.compEntries[i].starred = true;
@@ -153,7 +152,6 @@ export class StorageComponent implements OnInit, OnDestroy {
     this.starredItems.push({id: id, starred: true}); */
     const foundItem = this.compEntries.find(item => item.id === id) || {} ;
     if (foundItem) {
-      console.log(foundItem);
       foundItem.starred = true;
       this.starredItems.push(foundItem);
 
@@ -166,7 +164,6 @@ export class StorageComponent implements OnInit, OnDestroy {
     this.starredItems = JSON.parse(localStorage.getItem('entries')) || [];
     this.compEntries.find(item => item.id === id).starred = false;
     this.starredItems = this.starredItems.filter(el => el.id !== id);
-    console.log(this.starredItems);
     localStorage.setItem('entries', JSON.stringify(this.starredItems));
   }
   ngOnDestroy() {
@@ -174,7 +171,7 @@ export class StorageComponent implements OnInit, OnDestroy {
   }
 }
 
-function checkStart(inItem: any) {
+function checkStars(inItem: any) {
   const currentStartItems = JSON.parse(localStorage.getItem('entries'));
   const results = currentStartItems.filter((item) => item.id === inItem.id)  || [];
 
