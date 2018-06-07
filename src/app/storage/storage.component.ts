@@ -1,7 +1,10 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
+import { FilesService } from './../files.service';
 
+import { Router, Routes } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
 
@@ -20,18 +23,30 @@ export class StorageComponent implements OnInit, OnDestroy {
   private compEntries: Array<any> = [];
   private imgEntries: Array<any> = [];
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,
+              private activatedRoute: ActivatedRoute,
+              private router: Router,
+              private filesService: FilesService) {}
 
-  ngOnInit() {
+ngOnInit() {
+
+    this.activatedRoute.url.subscribe(() => {
+    const paths = this.filesService.getFiles(this.router.url);
+   });
+
+
+   this.filesService.stream.subscribe((entries) => {
+      this.compEntries = entries;
+   });
+
     this.subscription = this.authService
       .getAuth()
       .subscribe(auth => (this.dbxAuth = auth));
 
-    /* if (this.dbxAuth.isAuth) { */
-      // ------ Beginning your code ------
+
       const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
       const localPath = this.path ? '/' + this.path : '';
-      const entries = {entries: [{ path: '/appar/', format: 'jpeg', size: 'w64h64' }]};
+     /*  const entries = {entries: [{ path: '/appar/', format: 'jpeg', size: 'w64h64' }]}; */
       dbx.usersGetSpaceUsage(null)
         .then(spaceInfo => {
           console.log(spaceInfo);
@@ -41,11 +56,14 @@ export class StorageComponent implements OnInit, OnDestroy {
           console.log(error);
         });
 
-      dbx.filesListFolder({ path: localPath })
+
+      /* dbx.filesListFolder(this.router.url)
         .then(response => {
           console.log(response);
-          this.getEntries(response.entries);
-          for (const entry of response.entries) {
+          this.getEntries(response.entries); */
+
+
+         /*  for (const entry of response.entries) {
             if (this.isImage(entry.path_lower)) {
               dbx.filesGetThumbnail({ path: entry.path_lower })
                 .then((result) => {
@@ -60,14 +78,15 @@ export class StorageComponent implements OnInit, OnDestroy {
         })
         .catch(error => {
           console.log(error);
-        });
-      // ------ End of your code ------
-   /*  } */
+        });  //add to service ***** + remove this block*/
+
   }
+
 
   previewFile(event) {
     console.log(event.target.innerText);
   }
+
   downloadFile(filepath, filename, event) {
     event.preventDefault();
     const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
@@ -125,15 +144,7 @@ export class StorageComponent implements OnInit, OnDestroy {
     }
     return fileType;
   }
-  /* getThumbnail(imagePath) {
-    const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-    dbx.filesGetThumbnail({ path: imagePath, format: 'jpeg', size: 'w64h64' })
-      .then((result) => {
-        console.log(result);
-        this.imgUrl = URL.createObjectURL(result.fileBlob);
-        // document.getElementById('testbild').setAttribute('src', this.imgUrl);
-    });
-  } */
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

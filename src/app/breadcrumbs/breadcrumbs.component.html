@@ -1,0 +1,10 @@
+<ul>
+    <li>Navigation <a routerLink="">{{ '' ? 'Home' : 'Home' }}</a>
+          <a *ngFor="let path of pathArray" routerLink="/{{path.fullpath}}" routerLinkActive="active">{{path.path}}/</a>
+  </li>
+  <li>
+          <a *ngIf="parentFolder.length > 0" routerLink="/{{ parentFolder[parentFolder.length - 1].fullpath }}" routerLinkActive="active"> Up</a>
+  </li>
+</ul>
+
+

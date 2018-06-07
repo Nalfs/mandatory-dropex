@@ -15,13 +15,15 @@ import { LogoutComponent } from './logout/logout.component';
 import { SearchComponent } from './search/search.component';
 import { UploadComponent } from './upload/upload.component';
 import { FilesizePipe } from './filesize.pipe';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+import { FilesService } from './files.service';
 
 
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
     { path: 'logout', component: LogoutComponent},
     { path: 'search', component: SearchComponent, canActivate: [AuthService] },
-    { path: '', component: BoardComponent, canActivate: [AuthService] }
+    { path: '**', component: BoardComponent, canActivate: [AuthService] }
 ];
 
 @NgModule({
@@ -34,14 +36,16 @@ const appRoutes = [
     SearchComponent,
     UploadComponent,
     FilesizePipe,
+    BreadcrumbsComponent,
   ],
   imports: [
-    BrowserModule,
+
+  BrowserModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, FilesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
