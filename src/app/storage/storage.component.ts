@@ -4,6 +4,7 @@ import { Dropbox } from 'dropbox';
 
 import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
+import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'app-storage',
@@ -43,7 +44,7 @@ export class StorageComponent implements OnInit, OnDestroy {
         });
       dbx.filesListFolder({ path: localPath })
         .then(response => {
-          console.log(response);
+          console.log(response.entries);
           this.getEntries(response.entries);
           for (const entry of response.entries) {
             if (this.isImage(entry.path_lower)) {
@@ -100,14 +101,12 @@ export class StorageComponent implements OnInit, OnDestroy {
           }
         } */
 
-
       }
     } else {
       for (const entry of this.compEntries) {
         entry.starred = false;
       }
     }
-   // localStorage.setItem('entries', JSON.stringify(this.compEntries));
     console.log('storageComp-get entries outside', this.compEntries);
   }
 

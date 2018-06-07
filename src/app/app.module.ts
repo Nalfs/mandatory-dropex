@@ -15,6 +15,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { SearchComponent } from './search/search.component';
 import { UploadComponent } from './upload/upload.component';
 import { FilesizePipe } from './filesize.pipe';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 
 const appRoutes = [
@@ -34,6 +35,7 @@ const appRoutes = [
     SearchComponent,
     UploadComponent,
     FilesizePipe,
+    FavoritesComponent,
   ],
   imports: [
     BrowserModule,

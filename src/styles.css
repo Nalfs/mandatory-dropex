@@ -9,10 +9,11 @@
   font-weight: 300;
 }
 .nav {
-  width: 200px;
-  /*background-color: #444a64;*/
+  /*width: 15%;
+  background-color: #444a64;*/
   background: linear-gradient(#444a64,#000000e6);
   text-align: center;
+  height: 100vh;
 }
 .nav-link {
   color: #afb0af;
@@ -25,7 +26,7 @@
   padding: 15px;
 
 }
-i, .thumbnail {
+/* i, .thumbnail {
   margin-right: 15px;
 }
 td a, td a:link a:visited  {
@@ -42,7 +43,7 @@ table a, table i {
 }
 .table {
   color: #5d5858;
-  background-color: /*#f9f9f9*/#fcfcfc66;
+  background-color: #fcfcfc66;
 }
 tbody > tr:hover {
   background-color: #ebf3f61a;
@@ -69,4 +70,4 @@ tr:hover .fav {
   vertical-align: middle;
   color: blue;
   opacity: 1;
-}
+} */

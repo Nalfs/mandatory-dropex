@@ -1,4 +1,4 @@
-<ul>
+<!-- <ul>
   <li>Navigation
     <a href="">{{ '' ? 'Home' : 'Home' }}</a>
     <a *ngFor="let path of pathArray" href="/?path={{path.fullpath}}">{{path.path}}/</a>
@@ -6,7 +6,7 @@
   <li>
     <a *ngIf="parentFolder.length > 0" href="/?path={{ parentFolder[parentFolder.length - 1].fullpath }}"> Up</a>
   </li>
-</ul>
+</ul> -->
 <ng-template *ngIf="!dbxAuth.isAuth; then thenBlock; else elseBlock"></ng-template>
 
 <ng-template #thenBlock>
@@ -15,27 +15,29 @@
 
 <ng-template #elseBlock>
   <div class="row">
-    <ul class="nav flex-column">
-      <li class="nav-item nav-bar-brand">
-        <i class="fab fa-dropbox fa-3x"></i>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link active" href=" "><i class="far fa-file"></i>Files</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="far fa-star"></i>Starred</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
-    </ul>
-    <app-storage [path]="currentPath"></app-storage>
+    <div class="col-sm-2">
+      <ul class="nav flex-sm-column">
+        <li class="nav-item nav-bar-brand">
+          <i class="fab fa-dropbox fa-3x"></i>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href=" ">
+            <i class="far fa-file"></i>Files</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="far fa-star"></i>Starred</a>
+        </li>
+        <li class="nav-item">
+            <a routerLink="/logout" routerLinkActive="active">Logout</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm">
+      <app-search></app-search>
+      <app-storage [path]="currentPath"></app-storage>
+    </div>
   </div>
-  <app-search></app-search>
-  <a routerLink="/logout" routerLinkActive="active">Logout</a>
   <app-upload [currentPath]="currentPath"></app-upload>
 </ng-template>
 
