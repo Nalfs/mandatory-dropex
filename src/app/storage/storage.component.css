@@ -5,6 +5,7 @@ td a, td a:link a:visited  {
   text-decoration: none;
   color: inherit;
 }
+
 .table thead th {
   border-top: none;
   padding-bottom: 3px;
@@ -15,6 +16,7 @@ table a, table i {
   vertical-align: middle;
 }
 .table {
+  max-width: 700px;
   color: #5d5858;
   background-color: /*#f9f9f9*/#fcfcfc66;
 }

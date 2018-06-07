@@ -25,20 +25,26 @@
             <i class="far fa-file"></i>Files</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="far fa-star"></i>Starred</a>
+          <a class="nav-link" href="?status=favo">
+            <i class="far fa-star"></i>
+            Starred
+          </a>
         </li>
         <li class="nav-item">
             <a routerLink="/logout" routerLinkActive="active">Logout</a>
         </li>
       </ul>
     </div>
-    <div class="col-sm">
-      <app-search></app-search>
-      <app-storage [path]="currentPath"></app-storage>
+    <div class="col">
+      <div class="col-md">
+        <app-search></app-search>
+        <app-upload [currentPath]="currentPath"></app-upload>
+      </div>
+      <div class="col-md">
+        <app-storage [path]="currentPath" [status]="status"></app-storage>
+      </div>
     </div>
   </div>
-  <app-upload [currentPath]="currentPath"></app-upload>
 </ng-template>
 
 <!-- A example link -->

@@ -6,6 +6,7 @@ import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
 import { SearchComponent } from '../search/search.component';
 
+
 @Component({
   selector: 'app-storage',
   templateUrl: './storage.component.html',
@@ -13,6 +14,8 @@ import { SearchComponent } from '../search/search.component';
 })
 export class StorageComponent implements OnInit, OnDestroy {
   @Input() path: string;
+  @Input() status: string;
+
   storageSpace;
   usedSpace;
   imgUrl;
@@ -22,7 +25,8 @@ export class StorageComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private compEntries: Array<any> = [];
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+  }
 
   ngOnInit() {
     this.subscription = this.authService
@@ -31,9 +35,23 @@ export class StorageComponent implements OnInit, OnDestroy {
 
     /* if (this.dbxAuth.isAuth) { */
       // ------ Beginning your code ------
-      const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+     // this.getData();
+      console.log('status: ', this.status);
+      if (this.status === 'favo') {
+        const data = this.getFavorites();
+        this.renderData(data);
+      } else {
+        this.getData();
+      }
+      // ------ End of your code ------
+   /*  } */
+  }
+
+  getData() {
+   // const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
       const localPath = this.path ? '/' + this.path : '';
       const entries = {entries: [{ path: '/appar/', format: 'jpeg', size: 'w64h64' }]};
+      const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
       dbx.usersGetSpaceUsage(null)
         .then(spaceInfo => {
           console.log(spaceInfo);
@@ -45,8 +63,9 @@ export class StorageComponent implements OnInit, OnDestroy {
       dbx.filesListFolder({ path: localPath })
         .then(response => {
           console.log(response.entries);
-          this.getEntries(response.entries);
-          for (const entry of response.entries) {
+          this.renderData(response.entries);
+
+          /* for (const entry of response.entries) {
             if (this.isImage(entry.path_lower)) {
               dbx.filesGetThumbnail({ path: entry.path_lower })
                 .then((result) => {
@@ -57,13 +76,12 @@ export class StorageComponent implements OnInit, OnDestroy {
                   console.error(error);
                 });
             }
-          }
+          } */
+
         })
         .catch(error => {
           console.log(error);
         });
-      // ------ End of your code ------
-   /*  } */
   }
 
   previewFile(event) {
@@ -89,7 +107,8 @@ export class StorageComponent implements OnInit, OnDestroy {
       });
   }
 
-  getEntries(inEntries: Array<any>) {
+  renderData(inEntries: Array<any>) {
+    const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
     this.compEntries = inEntries;
     if (localStorage.getItem('entries') !== null) {
       // this.starredItems = JSON.parse(localStorage.getItem('entries')) || [];
@@ -100,14 +119,30 @@ export class StorageComponent implements OnInit, OnDestroy {
             this.compEntries[i].starred = true;
           }
         } */
-
       }
     } else {
       for (const entry of this.compEntries) {
         entry.starred = false;
       }
     }
+    for (const entry of this.compEntries) {
+      if (this.isImage(entry.path_lower)) {
+        dbx.filesGetThumbnail({ path: entry.path_lower })
+          .then((result) => {
+            const fileUrl = URL.createObjectURL((<any> result).fileBlob);
+            document.getElementById(entry.path_lower).setAttribute('src', fileUrl);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    }
     console.log('storageComp-get entries outside', this.compEntries);
+  }
+  getFavorites () {
+    console.log('ok fav');
+    const data = JSON.parse(localStorage.getItem('entries'));
+    return data;
   }
 
   isImage(fileName: string) {

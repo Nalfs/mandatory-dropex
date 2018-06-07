@@ -5,6 +5,8 @@
   <li class="list-group-item" *ngFor="let entry of compEntries">{{ entry['.tag'] }}</li>
 </ul> -->
 <div class="container">
+  
+  <p>Files</p>
   <table class="table">
     <thead>
       <tr>
@@ -14,7 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of compEntries; let i = index">
+      <tr *ngFor="let item of compEntries">
         <ng-template *ngIf="item['.tag'] === 'folder';then thenBlock; else elseBlock"></ng-template>
         <ng-template #thenBlock>
           <td>

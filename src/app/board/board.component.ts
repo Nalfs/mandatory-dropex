@@ -17,6 +17,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private dbxAuth: DbxAuth;
     private subscription: Subscription;
     public currentPath = getParamFromUrl('path');
+    public status = getParamFromUrl('status');
     pathArray;
     link;
     backLink;
