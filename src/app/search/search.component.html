@@ -3,9 +3,10 @@
   Keyword: {{lastSearch[0].searchterm}}
   <div *ngFor="let search of lastSearch">{{search.metadata.name}}</div>
 </div>
-<div>
+<div class="searchContainer col-auto">
   <form #form="ngForm" class="form-group">
-    <label for="username">Search</label>
+    <!-- <label for="search">Search</label> -->
+    <div class="input-group">
       <input class="form-control"
              type="text" 
              name="search" 
@@ -13,7 +14,14 @@
              required 
              minlength="1"
              [(ngModel)]="query">
-     <button type="submit" (click)="search($event); form.reset()" [disabled]="!form.form.valid">Search</button>
+      <div class="input-group-append">
+        <button type="submit" 
+                (click)="search($event); form.reset()" 
+                [disabled]="!form.form.valid"
+                class="btn btn-outline-primary">
+                <i class="fas fa-search"></i></button>
+      </div>
+    </div>
     </form>
 </div> 
 

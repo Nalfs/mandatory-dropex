@@ -5,12 +5,14 @@
   <li class="list-group-item" *ngFor="let entry of compEntries">{{ entry['.tag'] }}</li>
 </ul> -->
 <div class="container">
+  
+  <p>Files</p>
   <table class="table">
     <thead>
       <tr>
-        <th>Name &#9662;</th>
-        <th>Last Modified &#9662;</th>
-        <th>Size &#9662;</th>
+        <th>Name</th>
+        <th>Last Modified</th>
+        <th>Size</th>
       </tr>
     </thead>
     <tbody>
@@ -20,7 +22,7 @@
           <td>
             <div>
               <i class="fas fa-folder fa-2x"></i>
-              <a href="/?path={{item.path_lower}}">{{ item.name }}</a>
+                <a routerLink="/{{item.path_lower}}" routerLinkActive="active">{{ item.name }}</a>
             </div>
           </td>
           <td>
@@ -40,6 +42,18 @@
               <a (click)="downloadFile(item.path_lower, item.name, $event)" href="">
                 <span>{{ item.name }}</span>
               </a>
+              <span *ngIf="!item.starred" 
+                    class="fav" 
+                    [id]="item.id" 
+                    (click)="addStar(item.id, $event)">
+                    &#9733;
+              </span>
+              <span *ngIf="item.starred"
+                    [id]="item.id" 
+                    (click)="delStar(item.id, $event)"
+                    class="starred">
+                    &#9733;
+              </span>
             </div>
           </td>
           <td>
