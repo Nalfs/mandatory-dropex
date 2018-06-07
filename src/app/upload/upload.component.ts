@@ -42,6 +42,7 @@ export class UploadComponent implements OnInit {
 
   storeFiles(files) {
     this.files = files;
+    this.upload();
   }
 
   upload() {
