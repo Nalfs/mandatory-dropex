@@ -5,7 +5,10 @@
  -->
  <div class="col-auto uploadContainer">
    <form #form="ngForm" class="form-group">
-     <input type="file" id="file-upload" name="upload " (change)="storeFiles($event.target.files)" [(ngModel)]="filename.name"  />
-     <button type="submit" (click)="upload()">Submit</button>
-   </form>
+     <div class="fileContainer">
+       Upload       
+       <input type="file" id="file-upload" name="upload " (change)="storeFiles($event.target.files)" [(ngModel)]="filename.name"  />
+     </div>
+<!--      <button type="submit" (click)="upload()">Submit</button>
+ -->   </form>
  </div>
