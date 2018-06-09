@@ -18,7 +18,7 @@ table a, table i {
 .table {
   max-width: 700px;
   color: #5d5858;
-  background-color: /*#f9f9f9*/#fcfcfc66;
+  background-color: /*#f9f9f9 #fcfcfc66*/#fff6;
 }
 tbody > tr:hover {
   background-color: #ebf3f61a;

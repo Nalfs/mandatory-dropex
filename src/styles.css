@@ -13,7 +13,7 @@
   background-color: #444a64;*/
   background: linear-gradient(#444a64,#000000e6);
   text-align: center;
-  height: 100vh;
+  height: 100%;
 }
 .nav-link {
   color: #afb0af;
