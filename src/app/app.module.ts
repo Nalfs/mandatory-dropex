@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AuthService } from './auth.service';
-
+import { StorageService } from './storage.service';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
@@ -45,7 +45,7 @@ const appRoutes = [
     RouterModule.forRoot(appRoutes),
     HttpClientModule
   ],
-  providers: [AuthService, FilesService],
+  providers: [AuthService, FilesService, StorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -24,7 +24,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
       this.subscription = this.activatedRoute.url.subscribe(() => {
-        this.pathArray = this.getPathsToRenderFromUrl(this.router.url);
+        const urlWithoutParams = decodeURIComponent(this.router.url).split('?')[0]; // Added by K
+        this.pathArray = this.getPathsToRenderFromUrl(urlWithoutParams);
         this.goBack = this.goBackFn(this.currentPath);
       });
   }

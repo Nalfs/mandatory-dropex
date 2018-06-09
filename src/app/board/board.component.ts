@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 
 import { AuthService } from '../auth.service';
+import { StorageService } from '../storage.service';
 import { DbxAuth } from '../configs';
 
-import { Router, Routes } from '@angular/router';
+import { Router } from '@angular/router';
 import { getParamFromUrl } from '../utils';
 
 @Component({
@@ -18,18 +19,22 @@ export class BoardComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
 
 
-    constructor(private authService: AuthService, private router: Router) {
-
-        }
+    constructor(private authService: AuthService,
+        private router: Router,
+        private storageService: StorageService) {}
 
     ngOnInit() {
         this.subscription = this.authService.getAuth()
-                                .subscribe((auth) => this.dbxAuth = auth);
-
+            .subscribe((auth) => this.dbxAuth = auth);
     }
-
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    showFavorites(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.storageService.activateShowFavorites();
     }
 }
