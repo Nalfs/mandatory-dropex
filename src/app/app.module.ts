@@ -47,7 +47,7 @@ const appRoutes = [
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload'}),
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig.firebase),
     AngularFireDatabaseModule
