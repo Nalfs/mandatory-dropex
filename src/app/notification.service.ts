@@ -77,7 +77,6 @@ export class NotificationService {
             fullPath = '';
         }
         this.currentPath = fullPath;
-        console.log('currentPath', this.currentPath);
     }
 
     updateChangePath(fullPath: String) {
@@ -85,7 +84,6 @@ export class NotificationService {
             fullPath = '';
         }
         this.changePath = fullPath;
-        console.log('changePath', this.changePath);
 
         if (this.changePath === this.currentPath) {
             this.hasChange = true;

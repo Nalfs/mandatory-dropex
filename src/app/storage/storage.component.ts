@@ -9,6 +9,8 @@ import { FilesService } from '../files.service';
 import { StorageService } from '../storage.service';
 import { DbxAuth } from '../configs';
 
+import { UrlMethods } from '../utils';
+
 // import { SearchComponent } from '../search/search.component'; Deleted by K
 
 @Component({
@@ -54,13 +56,10 @@ export class StorageComponent implements OnInit, OnDestroy {
         this.dbxConnection = new Dropbox({ accessToken: this.dbxAuth.accessToken });
 
         this.activatedRoute.url.subscribe(() => {
-            const urlWithoutParams = decodeURIComponent(this.router.url).split('?')[0];
+            const urlWithoutParams = UrlMethods.decodeWithoutParams(this.router.url);
             const paths = this.filesService.getFiles(urlWithoutParams);
-            if (this.currentUrl === '/') {
-                this.currentUrl = '';
-            }
             this.currentUrl = urlWithoutParams;
-            console.log('this.currentUrl', this.currentUrl);
+            console.log('Current URL', this.currentUrl);
         });
 
         this.fileStreamSubscription = this.filesService.stream.subscribe(
@@ -72,7 +71,6 @@ export class StorageComponent implements OnInit, OnDestroy {
         this.showFavoritesSubscription = this.storageService.showFavorites()
             .subscribe((status) => {
                 this.showFavorites = status;
-                console.log('showFavorites', this.showFavorites);
             });
 
         // New code to auto rerender this component
@@ -80,7 +78,7 @@ export class StorageComponent implements OnInit, OnDestroy {
         this.notificationService.checkHasChange()
             .subscribe(changed => {
                 this.hasChanged = changed;
-                console.log('this.hasChanged', this.hasChanged);
+                console.log('Has changed', this.hasChanged);
                 this.checkHasChanged();
             });
         // -- End new --
@@ -89,17 +87,16 @@ export class StorageComponent implements OnInit, OnDestroy {
     // New method to auto rerender this component
     checkHasChanged() {
         if (this.hasChanged) {
-            console.log('reload now', this.compEntries, this.currentUrl);
+            console.log('Rerender now');
             this.filesService.getFiles(this.currentUrl);
             this.notificationService.hasReRendered(); // report to service that this component has rerendered
         } else {
-            console.log('nothing now', this.currentUrl);
+            console.log('Nothing changed');
         }
     }
     // -- End new --
 
     updateFileStream(inData: Array<any>) {
-        console.log('showFavorites-stream', this.showFavorites);
         this.compEntries = inData;
 
         if (this.showFavorites) {
@@ -200,7 +197,6 @@ export class StorageComponent implements OnInit, OnDestroy {
     }
 
     getFavorites() {
-        console.log('ok fav');
         const data = JSON.parse(localStorage.getItem('entries'));
         return data;
     }
@@ -272,3 +268,4 @@ function checkStars(inItem: any) {
 
     return results.length > 0 ? true : false;
 }
+
