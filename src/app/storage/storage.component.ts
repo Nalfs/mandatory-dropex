@@ -19,7 +19,7 @@ import { DbxAuth } from '../configs';
 export class StorageComponent implements OnInit, OnDestroy {
   /* @Input() path: string;
     @Input() status: string; */ /* Deleted by K */
-    
+
     private hasChanged = false; // -- new property by K --
     private currentUrl = ''; // -- new property by K --
 
