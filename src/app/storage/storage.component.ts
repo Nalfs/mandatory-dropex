@@ -19,88 +19,7 @@ import { DbxAuth } from '../configs';
 export class StorageComponent implements OnInit, OnDestroy {
   /* @Input() path: string;
     @Input() status: string; */ /* Deleted by K */
-
-<<<<<<< HEAD
-  storageSpace;
-  usedSpace;
-  imgUrl;
-  isStarred = false;
-  starredItems = [];
-  inEntries: Array<any> = [];
-  private dbxAuth: DbxAuth;
-  private dbxAuthSubscription: Subscription;
-  private fileStreamSubscription: Subscription;
-  private compEntries: Array<any> = [];
-  private dbxConnection;
-
-  private showFavorites = false;
-  private showFavoritesSubscription: Subscription;
-
-  constructor(
-    private authService: AuthService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private filesService: FilesService,
-    private storageService: StorageService
-  ) {}
-
-  ngOnInit() {
-    this.dbxAuthSubscription = this.authService
-      .getAuth()
-      .subscribe(auth => (this.dbxAuth = auth));
-
-    this.dbxConnection = new Dropbox({ accessToken: this.dbxAuth.accessToken });
-
-    this.activatedRoute.url.subscribe(() => {
-      const urlWithoutParams = decodeURIComponent(this.router.url).split('?')[0];
-      const paths = this.filesService.getFiles(urlWithoutParams);
-    });
-
-    this.fileStreamSubscription = this.filesService.stream.subscribe(
-      entries => {
-        this.updateFileStream(entries);
-      }
-    );
-
-    this.showFavoritesSubscription = this.storageService.showFavorites()
-      .subscribe(status => {
-        this.showFavorites = status;
-        console.log('showFavorites', this.showFavorites);
-      });
-  }
-
-  updateFileStream(inData: Array<any>) {
-    console.log('showFavorites-stream', this.showFavorites);
-    this.compEntries = inData;
-
-    if (this.showFavorites) {
-      const data = this.getFavorites();
-      if (data) {
-        this.renderData(data);
-      }
-      this.storageService.deactivateShowFavorites();
-    } else {
-      this.getData();
-      this.renderData(this.compEntries);
-    }
-  }
-
-  getData() {
-    const localPath = this.path ? '/' + this.path : '';
-    const entries = {
-      entries: [{ path: '/appar/', format: 'jpeg', size: 'w64h64' }]
-    };
-    this.dbxConnection.usersGetSpaceUsage(null)
-      .then(spaceInfo => {
-        console.log(spaceInfo);
-        this.storageSpace = (spaceInfo.used / 1024 / 1024 / 1024).toFixed(2);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-    /*  for (const entry of response.entries) {
-=======
+    
     private hasChanged = false; // -- new property by K --
     private currentUrl = ''; // -- new property by K --
 
@@ -208,7 +127,6 @@ export class StorageComponent implements OnInit, OnDestroy {
             });
 
         /*  for (const entry of response.entries) {
->>>>>>> 3f07eb46b2f05ed245b943f7a7ebfbbda4a3cbd2
                if (this.isImage(entry.path_lower)) {
                  dbx.filesGetThumbnail({ path: entry.path_lower })
                    .then((result) => {

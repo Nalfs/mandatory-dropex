@@ -10,46 +10,34 @@
 
 </div>
 <ng-template #elseBlock>
-    <div class="row">
-        <div class="col-sm-2">
-            <ul class="nav flex-sm-column">
-                <li class="nav-item nav-bar-brand">
-                    <i class="fab fa-dropbox fa-3x"></i>
-                </li>
-                <li class="nav-item">
-                    <a routerLink="" class="nav-link active">
-                        <i class="far fa-file"></i>Files</a>
-                </li>
-                <li class="nav-item">
-                    <!-- <a class="nav-link" routerLink="/stars" href="?status=favo"> Deleted by K -->
-                        <a class="nav-link" routerLink="/?stars" (click)="showFavorites($event)"> <!-- K added -->
-                        <i class="far fa-star"></i>
-                        Starred
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a routerLink="/logout" routerLinkActive="active">Logout</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col">
-            <div class="col-md">
-                <app-search></app-search>
-                <!-- <app-upload [currentPath]="currentPath"></app-upload> Deactivated by K-->
-                <app-webhooks></app-webhooks>
-            </div>
-            <div class="col-md">
-                <!-- <app-storage [path]="currentPath" [status]="status"></app-storage> Deleted by K-->
-                <app-storage></app-storage>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <ul class="nav flex-sm-column">
+        <li class="nav-item nav-bar-brand">
+          <i class="fab fa-dropbox fa-3x"></i>
+        </li>
+        <li class="nav-item">
+          <a routerLink="" class="nav-link active">
+            <i class="far fa-file"></i>Files</a>
+        </li>
+        <li class="nav-item">
+          <!-- <a class="nav-link" routerLink="/stars" href="?status=favo"> Deleted by K -->
+          <a class="nav-link" routerLink="/?stars" (click)="showFavorites($event)">
+            <!-- K added -->
+            <i class="far fa-star"></i>
+            Starred
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/logout" routerLinkActive="active">Logout</a>
+        </li>
+      </ul>
     </div>
     <div class="col">
       <div class="col-md">
-        <app-breadcrumbs></app-breadcrumbs>
-
         <app-search></app-search>
         <!-- <app-upload [currentPath]="currentPath"></app-upload> Deactivated by K-->
+        <app-webhooks></app-webhooks>
       </div>
       <div class="col-md">
         <!-- <app-storage [path]="currentPath" [status]="status"></app-storage> Deleted by K-->
