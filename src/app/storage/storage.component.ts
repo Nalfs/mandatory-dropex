@@ -103,7 +103,7 @@ export class StorageComponent implements OnInit, OnDestroy {
         this.compEntries = inData;
 
         if (this.showFavorites) {
-            const data = this.getFavorites();
+            const data = this.getFavorites() || []; // Modified by K
             this.renderData(data);
             this.storageService.deactivateShowFavorites();
         } else {
