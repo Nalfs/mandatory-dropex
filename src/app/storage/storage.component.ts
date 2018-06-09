@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
 
+import { NotificationService } from '../notification.service'; // -- new import by K
 import { AuthService } from '../auth.service';
 import { FilesService } from '../files.service';
 import { StorageService } from '../storage.service';
@@ -19,6 +20,10 @@ export class StorageComponent implements OnInit, OnDestroy {
     /* @Input() path: string;
     @Input() status: string; */ /* Deleted by K */
 
+    private hasChanged = false; // -- new property by K --
+    private currentUrl = ''; // -- new property by K --
+
+    path; // Added by K for cheat :-P
     storageSpace;
     usedSpace;
     imgUrl;
@@ -35,10 +40,11 @@ export class StorageComponent implements OnInit, OnDestroy {
     private showFavoritesSubscription: Subscription;
 
     constructor(private authService: AuthService,
-                private activatedRoute: ActivatedRoute,
-                private router: Router,
-                private filesService: FilesService,
-                private storageService: StorageService) {}
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
+        private filesService: FilesService,
+        private storageService: StorageService,
+        private notificationService: NotificationService) { } // -- new service by K --
 
     ngOnInit() {
         this.dbxAuthSubscription = this.authService
@@ -50,6 +56,11 @@ export class StorageComponent implements OnInit, OnDestroy {
         this.activatedRoute.url.subscribe(() => {
             const urlWithoutParams = decodeURIComponent(this.router.url).split('?')[0];
             const paths = this.filesService.getFiles(urlWithoutParams);
+            if (this.currentUrl === '/') {
+                this.currentUrl = '';
+            }
+            this.currentUrl = urlWithoutParams;
+            console.log('this.currentUrl', this.currentUrl);
         });
 
         this.fileStreamSubscription = this.filesService.stream.subscribe(
@@ -58,11 +69,34 @@ export class StorageComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.showFavoritesSubscription = this.storageService.showFavorites().subscribe((status) => {
-            this.showFavorites = status;
-            console.log('showFavorites', this.showFavorites);
-        });
+        this.showFavoritesSubscription = this.storageService.showFavorites()
+            .subscribe((status) => {
+                this.showFavorites = status;
+                console.log('showFavorites', this.showFavorites);
+            });
+
+        // New code to auto rerender this component
+        this.notificationService.updateCurrentPath(this.currentUrl);
+        this.notificationService.checkHasChange()
+            .subscribe(changed => {
+                this.hasChanged = changed;
+                console.log('this.hasChanged', this.hasChanged);
+                this.checkHasChanged();
+            });
+        // -- End new --
     }
+
+    // New method to auto rerender this component
+    checkHasChanged() {
+        if (this.hasChanged) {
+            console.log('reload now', this.compEntries, this.currentUrl);
+            this.filesService.getFiles(this.currentUrl);
+            this.notificationService.hasReRendered(); // report to service that this component has rerendered
+        } else {
+            console.log('nothing now', this.currentUrl);
+        }
+    }
+    // -- End new --
 
     updateFileStream(inData: Array<any>) {
         console.log('showFavorites-stream', this.showFavorites);
@@ -73,7 +107,6 @@ export class StorageComponent implements OnInit, OnDestroy {
             this.renderData(data);
             this.storageService.deactivateShowFavorites();
         } else {
-            // this.getData();
             this.renderData(this.compEntries);
         }
     }
