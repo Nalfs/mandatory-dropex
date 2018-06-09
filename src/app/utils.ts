@@ -14,6 +14,21 @@ export function getParamFromUrl(param) {
     }
 }
 
+export const UrlMethods = {
+    decodeWithoutParams(url) {
+        try {
+            let cleanUrl = decodeURIComponent(url).split('?')[0] || '';
+            if (cleanUrl === '/') {
+                cleanUrl = '';
+            }
+            return cleanUrl;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+};
+
 export function getAuthObj() {
     try {
         const sQueryString = document.URL.split('#')[1] || document.URL.split('?')[1] || '';
