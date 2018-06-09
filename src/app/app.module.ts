@@ -4,8 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+
 import { AuthService } from './auth.service';
 import { StorageService } from './storage.service';
+import { NotificationService } from './notification.service';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
@@ -17,7 +21,8 @@ import { UploadComponent } from './upload/upload.component';
 import { FilesizePipe } from './filesize.pipe';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { FilesService } from './files.service';
-
+import { WebhooksComponent } from './webhooks/webhooks.component';
+import { firebaseConfig } from './configs';
 
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
@@ -37,15 +42,20 @@ const appRoutes = [
     UploadComponent,
     FilesizePipe,
     BreadcrumbsComponent,
+    WebhooksComponent,
   ],
   imports: [
-
-  BrowserModule,
+    BrowserModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
-    HttpClientModule
+    HttpClientModule,
+    AngularFireModule.initializeApp(firebaseConfig.firebase),
+    AngularFireDatabaseModule
   ],
-  providers: [AuthService, FilesService, StorageService],
+  providers: [AuthService,
+    FilesService,
+    StorageService,
+    NotificationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
