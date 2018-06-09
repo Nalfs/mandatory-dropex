@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Dropbox } from 'dropbox';
 
 import { dropboxConfig, DbxAuth } from '../configs';
-import { createObjFromParams } from '../utils';
+import { LocalStorageMethods, getAuthObj } from '../utils';
 
 import { AuthService } from '../auth.service';
 
@@ -22,13 +21,13 @@ export class AuthComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // Get credentials from service and keep data updated
         this.subscription = this.authService.getAuth()
-                                .subscribe((auth) => this.dbxAuth = auth);
+                                            .subscribe((auth) => this.dbxAuth = auth);
 
         // Begin authentication process if credentials not found
         if (!this.dbxAuth.isAuth) {
-            console.log('authComp-before', 'You are not logged in!', this.dbxAuth); // For testing purpose
-            const objParams = createObjFromParams();
+            const objParams = getAuthObj(); // Get authentication from URL and create auth object
 
+            // Create and store dbxAuth object for this app
             this.dbxAuth = {accessToken: objParams.access_token,
                             tokenType: objParams.token_type,
                             uid: objParams.uid,
@@ -39,14 +38,12 @@ export class AuthComponent implements OnInit, OnDestroy {
                                     objParams.account_id ? true : false
                         };
 
-            // Store credentials into Auth-service and into sessionStorage
+            // Store credentials into Auth-service and into localStorage
             if (this.dbxAuth.isAuth) {
                 this.authService.storeAuth(this.dbxAuth);
                 this.router.navigate(['']); // Navigate the user to homepage
             }
-            console.log('authComp-after', 'You are here!', this.dbxAuth); // For testing purpose
         } else {
-            console.log('authComp', 'You are logged in!', this.dbxAuth.isAuth); // For testing purpose
             this.router.navigate(['']); // Navigate the user to homepage
         }
     }

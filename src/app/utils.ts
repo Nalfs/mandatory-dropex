@@ -14,7 +14,7 @@ export function getParamFromUrl(param) {
     }
 }
 
-export function createObjFromParams() {
+export function getAuthObj() {
     try {
         const sQueryString = document.URL.split('#')[1] || document.URL.split('?')[1] || '';
         const referrerUrl = document.referrer;
@@ -44,35 +44,59 @@ export function createObjFromParams() {
     }
 }
 
-export function storeCredentials(credentials: DbxAuth) {
-    try {
-        if (typeof(Storage) !== 'undefined') {
-            const credentialsString = JSON.stringify(credentials);
-            sessionStorage.setItem('dropexCredentials', credentialsString);
+export const LocalStorageMethods = {
+    store(key, value) {
+        try {
+            if (typeof(Storage) !== 'undefined') {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            return error;
         }
-    } catch (error) {
-        return error;
-    }
-}
-
-export function retrieveCredentials() {
-    try {
-        if (typeof(Storage) !== 'undefined' && sessionStorage.getItem('dropexCredentials')) {
-            return JSON.parse(sessionStorage.getItem('dropexCredentials'));
+    },
+    retrieve(key) {
+        try {
+            if (typeof(Storage) !== 'undefined') {
+                if (localStorage.getItem(key)) {
+                    return JSON.parse(localStorage.getItem(key));
+                } else {
+                    return null;
+                }
+            } else {
+                return false;
+            }
+        } catch (error) {
+            return error;
         }
-        return null;
-    } catch (error) {
-        return error;
-    }
-}
-
-export function clearCredentials() {
-    try {
-        if (typeof(Storage) !== 'undefined' && sessionStorage.getItem('dropexCredentials')) {
-            sessionStorage.removeItem('dropexCredentials');
+    },
+    remove(key) {
+        try {
+            if (typeof(Storage) !== 'undefined') {
+                if (localStorage.getItem(key)) {
+                    localStorage.removeItem(key);
+                    return true;
+                } else {
+                    return null;
+                }
+            } else {
+                return false;
+            }
+        } catch (error) {
+            return error;
         }
-        return null;
-    } catch (error) {
-        return error;
+    },
+    clear() {
+        try {
+            if (typeof(Storage) !== 'undefined') {
+                localStorage.clear();
+            } else {
+                return false;
+            }
+        } catch (error) {
+            return error;
+        }
     }
-}
+};

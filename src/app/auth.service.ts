@@ -3,23 +3,20 @@ import { BehaviorSubject } from 'rxjs';
 import { CanActivate, Router } from '@angular/router';
 
 import { DbxAuth } from './configs';
-import { storeCredentials,
-         retrieveCredentials,
-         clearCredentials
-} from './utils';
+import { LocalStorageMethods } from './utils';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    private dbxAuth: DbxAuth = {...this.dbxAuth, isAuth: false}; // Set initial value isAuth: false
+    private dbxAuth: DbxAuth = { ...this.dbxAuth, isAuth: false }; // Set initial value isAuth: false
     private objBehaviorSubject: BehaviorSubject<any>;
 
-    constructor(public router: Router) {
+    constructor(private router: Router) {
         this.objBehaviorSubject = new BehaviorSubject(this.dbxAuth);
 
         // Get back saved credentials
-        const savedCredentials: DbxAuth = retrieveCredentials();
+        const savedCredentials: DbxAuth = LocalStorageMethods.retrieve('dropexCredentials');
         if (savedCredentials) {
             this.storeAuth(savedCredentials);
         }
@@ -31,23 +28,21 @@ export class AuthService {
 
     storeAuth(inDbxAuth: DbxAuth) {
         this.dbxAuth = inDbxAuth;
-        storeCredentials(this.dbxAuth);
+        LocalStorageMethods.store('dropexCredentials', this.dbxAuth);
         return this.objBehaviorSubject.next(this.dbxAuth);
     }
 
     clearAuth() {
         this.dbxAuth = {};
-        clearCredentials();
+        LocalStorageMethods.clear();
         return this.objBehaviorSubject.next(this.dbxAuth);
     }
 
     canActivate(): boolean {
         if (!this.dbxAuth.isAuth) {
-          this.router.navigate(['/auth']);
-          console.log('boardComp', 'You are not logged in!');
-          return false;
+            this.router.navigate(['/auth']);
+            return false;
         }
-        console.log('boardComp', 'You are not logged in!');
         return true;
-      }
+    }
 }
