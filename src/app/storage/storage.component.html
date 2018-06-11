@@ -41,10 +41,13 @@
             </div>
           </td>
           <td>
-            --
           </td>
           <td>
-            --
+          </td>
+          <td>
+            <div>
+              <app-delete [path]="item.path_lower"></app-delete>
+            </div>
           </td>
           <td>
             <div>
@@ -81,29 +84,30 @@
           <td>
             <div>
               <app-delete [path]="item.path_lower"></app-delete>
-              </div>
-        </td>
+            </div>
+          </td>
         </ng-template>
       </tr>
     </tbody>
   </table>
 </div>
-    <div *ngIf="showLastSearch" class="lastsearch">
-      <p>Your last searches</p>
-      <table class="table">
-        <thead>
-          <tr>
-            <th><i class="fas fa-search"></i> {{ lastSearch[0].searchterm }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of lastSearch">
-            <td>{{ item.metadata.name }}</td>
-          </tr>
-        </tbody>
-  
-      </table>
-    </div>
+<div *ngIf="showLastSearch" class="lastsearch">
+  <p>Your last searches</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          <i class="fas fa-search"></i> {{ lastSearch[0].searchterm }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of lastSearch">
+        <td>{{ item.metadata.name }}</td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>
 <!-- <div *ngIf="showLastSearch">
     <h3>Your last searchterm & search results</h3>
     Keyword: {{lastSearch[0].searchterm}}

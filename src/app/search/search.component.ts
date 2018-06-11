@@ -40,17 +40,13 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.router.navigate(['/auth']);
     } */
 
-    if (sessionStorage.getItem('lastSearches') !== null) {
+    /* if (sessionStorage.getItem('lastSearches') !== null) {
       this.showLastSearch = !this.showLastSearch;
       this.lastSearch = JSON.parse(sessionStorage.getItem('lastSearches'));
       console.log('this is' , this.lastSearch);
       this.lastSearch = this.lastSearch.slice(-3);
       console.log('this is second' , this.lastSearch[1].searchterm);
-      /* let i;
-       for (i = 0; i < this.lastSearch.length; i++) {
-         console.log('boom', this.lastSearch[i].metadata.name);
-       } */
-    }
+    } */
   }
 
   search(event) {
