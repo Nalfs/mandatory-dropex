@@ -23,6 +23,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { FilesService } from './files.service';
 import { WebhooksComponent } from './webhooks/webhooks.component';
 import { firebaseConfig } from './configs';
+import { DeleteComponent } from './delete/delete.component';
 
 const appRoutes = [
     { path: 'auth', component: AuthComponent },
@@ -43,6 +44,7 @@ const appRoutes = [
     FilesizePipe,
     BreadcrumbsComponent,
     WebhooksComponent,
+    DeleteComponent,
   ],
   imports: [
     BrowserModule,
