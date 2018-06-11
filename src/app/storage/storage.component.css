@@ -1,9 +1,16 @@
-i, .thumbnail {
+i,
+.thumbnail {
   margin-right: 15px;
 }
-td a, td a:link a:visited  {
+td a,
+td a:link a:visited {
   text-decoration: none;
   color: inherit;
+}
+td div {
+  white-space: no-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 
 .table thead th {
@@ -12,13 +19,15 @@ td a, td a:link a:visited  {
   padding-top: 1.5rem;
   font-weight: bolder;
 }
-table a, table i {
+table a,
+table i {
   vertical-align: middle;
 }
 .table {
+  width: 600px;
   max-width: 700px;
   color: #5d5858;
-  background-color: /*#f9f9f9 #fcfcfc66*/#fff6;
+  background-color: /*#f9f9f9 #fcfcfc66*/ #fff6;
 }
 tbody > tr:hover {
   background-color: #ebf3f61a;
@@ -45,4 +54,32 @@ tr:hover .fav {
   vertical-align: middle;
   color: blue;
   opacity: 1;
+}
+.spaceInfo {
+  width: 20%;
+  font-size: 12px;
+}
+.light-grey {
+  height: 10px;
+  width: 100%;
+  border: 1px solid #80808033;
+}
+.blue {
+  background-color: blue;
+  height: 9px;
+}
+.sp {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.lastsearch {
+  width: 200px;
+  border: 1px solid rgba(128, 128, 128, 0.24);
+  box-shadow: 0 1px 2px grey;
+}
+.lastsearch table, .lastsearch p {
+  width: 160px;
+  margin: 5px auto;
+  font-size: 14px;
 }

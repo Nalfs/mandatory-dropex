@@ -6,10 +6,8 @@
 <ng-template #thenBlock>
   <a routerLink="/auth" routerLinkActive="active">Go to Auth</a>
 </ng-template>
-<div>
 
-</div>
-<ng-template #elseBlock>
+<!-- <ng-template #elseBlock>
   <div class="row">
     <div class="col-sm-2">
       <ul class="nav flex-sm-column">
@@ -21,9 +19,7 @@
             <i class="far fa-file"></i>Files</a>
         </li>
         <li class="nav-item">
-          <!-- <a class="nav-link" routerLink="/stars" href="?status=favo"> Deleted by K -->
           <a class="nav-link" routerLink="/?stars" (click)="showFavorites($event)">
-            <!-- K added -->
             <i class="far fa-star"></i>
             Starred
           </a>
@@ -36,13 +32,56 @@
     <div class="col">
       <div class="col-md">
         <app-search></app-search>
-        <!-- <app-upload [currentPath]="currentPath"></app-upload> Deactivated by K-->
         <app-webhooks></app-webhooks>
       </div>
       <div class="col-md">
-        <!-- <app-storage [path]="currentPath" [status]="status"></app-storage> Deleted by K-->
         <app-storage></app-storage>
       </div>
     </div>
   </div>
+</ng-template> -->
+<ng-template #elseBlock>
+  <div class="page-container">
+    <div class="sidebar">
+      <ul class="nav">
+        <li class="nav-bar-brand">
+          <a routerLink="">
+            <i class="fab fa-dropbox fa-3x"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="" class="nav-link active">
+            <i class="far fa-file"></i>
+            Files
+          </a>
+        </li>
+        <li class="nav-item">
+          <!-- <a class="nav-link" routerLink="/stars" href="?status=favo"> Deleted by K -->
+          <a class="nav-link" routerLink="/?stars" (click)="showFavorites($event)">
+            <!-- K added -->
+            <i class="far fa-star"></i>
+            Starred
+          </a>
+        </li>
+        <li class="nav-item">
+
+          <a class="nav-link" routerLink="/logout" routerLinkActive="active">
+            <i class="fas fa-sign-out-alt"></i>
+            Sign out!
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="main">
+      <!-- <app-breadcrumbs></app-breadcrumbs>
+      <app-search></app-search> 
+      <app-upload></app-upload> -->
+      <app-webhooks></app-webhooks>
+      <div class="storage-container">
+        <app-storage></app-storage>
+      </div>
+    </div>
+
+  </div>
 </ng-template>
+<!-- <app-upload [currentPath]="currentPath"></app-upload> Deactivated by K-->

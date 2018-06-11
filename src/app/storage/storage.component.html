@@ -1,11 +1,20 @@
-<p>
-  storage component works! Don't click if you don't want to download {{ storageSpace }} Gb worth of Nadim's pr0n
-</p>
 <!-- <ul class="list-group">
   <li class="list-group-item" *ngFor="let entry of compEntries">{{ entry['.tag'] }}</li>
 </ul> -->
 <div class="container">
-
+  <div class="sp">
+    <app-breadcrumbs></app-breadcrumbs>
+    <div class="spaceInfo">
+      <div class="light-grey">
+        <div class="blue" [ngStyle]="{width: spacePercentage + '%'}"></div>
+      </div>
+      {{usedSpace}} Gb / {{storageSpace}} Gb
+    </div>
+  </div>
+  <div class="sp">
+    <app-search></app-search>
+    <app-upload></app-upload>
+  </div>
   <table class="table">
     <thead>
       <tr>
@@ -68,3 +77,24 @@
     </tbody>
   </table>
 </div>
+    <div *ngIf="showLastSearch" class="lastsearch">
+      <p>Your last searches</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th><i class="fas fa-search"></i> {{ lastSearch[0].searchterm }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of lastSearch">
+            <td>{{ item.metadata.name }}</td>
+          </tr>
+        </tbody>
+  
+      </table>
+    </div>
+<!-- <div *ngIf="showLastSearch">
+    <h3>Your last searchterm & search results</h3>
+    Keyword: {{lastSearch[0].searchterm}}
+    <div *ngFor="let search of lastSearch">{{search.metadata.name}}</div>
+  </div> -->

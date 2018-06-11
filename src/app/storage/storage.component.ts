@@ -8,6 +8,7 @@ import { AuthService } from '../auth.service';
 import { FilesService } from '../files.service';
 import { StorageService } from '../storage.service';
 import { DbxAuth } from '../configs';
+import { splitClasses } from '@angular/compiler';
 
 // import { SearchComponent } from '../search/search.component'; Deleted by K
 
@@ -26,10 +27,13 @@ export class StorageComponent implements OnInit, OnDestroy {
     path; // Added by K for cheat :-P
     storageSpace;
     usedSpace;
+    spacePercentage;
     imgUrl;
     isStarred = false;
     starredItems = [];
     inEntries: Array<any> = [];
+    showLastSearch = false;
+    lastSearch;
     private dbxAuth: DbxAuth;
     private dbxAuthSubscription: Subscription;
     private fileStreamSubscription: Subscription;
@@ -84,6 +88,20 @@ export class StorageComponent implements OnInit, OnDestroy {
                 this.checkHasChanged();
             });
         // -- End new --
+        if (sessionStorage.getItem('lastSearches') !== null) {
+          this.showLastSearch = !this.showLastSearch;
+          this.lastSearch = JSON.parse(sessionStorage.getItem('lastSearches'));
+          console.log('this is' , this.lastSearch);
+          if (this.lastSearch.length > 2) {
+            this.lastSearch = this.lastSearch.slice(-3);
+          }
+          console.log('this is second' , this.lastSearch[1].searchterm);
+          /* let i;
+           for (i = 0; i < this.lastSearch.length; i++) {
+             console.log('boom', this.lastSearch[i].metadata.name);
+           } */
+        }
+
     }
 
     // New method to auto rerender this component
@@ -107,6 +125,7 @@ export class StorageComponent implements OnInit, OnDestroy {
             this.renderData(data);
             this.storageService.deactivateShowFavorites();
         } else {
+            this.getData();
             this.renderData(this.compEntries);
         }
     }
@@ -120,7 +139,10 @@ export class StorageComponent implements OnInit, OnDestroy {
             .usersGetSpaceUsage(null)
             .then(spaceInfo => {
                 console.log(spaceInfo);
-                this.storageSpace = (spaceInfo.used / 1024 / 1024 / 1024).toFixed(2);
+                this.storageSpace = (spaceInfo.allocation.allocated / 1024 / 1024 / 1024).toFixed(2);
+                this.usedSpace = (spaceInfo.used / 1024 / 1024 / 1024).toFixed(2);
+                this.spacePercentage = (this.usedSpace / this.storageSpace) * 100;
+                console.log(this.spacePercentage);
             })
             .catch(error => {
                 console.log(error);
@@ -200,6 +222,7 @@ export class StorageComponent implements OnInit, OnDestroy {
       }
     }
     console.log('storageComp-get entries outside', inEntries);
+    
   }
 
   getFavorites() {
