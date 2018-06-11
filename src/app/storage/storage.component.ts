@@ -42,6 +42,8 @@ export class StorageComponent implements OnInit, OnDestroy {
 
     private showFavorites = false;
     private showFavoritesSubscription: Subscription;
+    private showDeletes = false;
+    private showDeletesSubscription: Subscription;
 
     constructor(private authService: AuthService,
         private activatedRoute: ActivatedRoute,
@@ -77,6 +79,12 @@ export class StorageComponent implements OnInit, OnDestroy {
             .subscribe((status) => {
                 this.showFavorites = status;
                 console.log('showFavorites', this.showFavorites);
+            });
+
+            this.showDeletesSubscription = this.storageService.showDeletes()
+            .subscribe((status) => {
+                this.showDeletes = status;
+                console.log('showDeletes', this.showDeletes);
             });
 
         // New code to auto rerender this component
@@ -222,7 +230,7 @@ export class StorageComponent implements OnInit, OnDestroy {
       }
     }
     console.log('storageComp-get entries outside', inEntries);
-    
+
   }
 
   getFavorites() {

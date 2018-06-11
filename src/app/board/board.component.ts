@@ -37,4 +37,10 @@ export class BoardComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         this.storageService.activateShowFavorites();
     }
+
+    showDeletes(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.storageService.activateShowDeletes();
+    }
 }

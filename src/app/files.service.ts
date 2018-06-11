@@ -46,12 +46,9 @@ export class FilesService {
   deleteFile(path) {
     this.dbx.filesDeleteV2({path: decodeURI(path)})
     .then(response => {
-       // window.location.reload(false);
         this.getFiles(path.substring(0, path.lastIndexOf('/')));
         this.tmpArr.push(response.metadata.name);
       alert('Your delete was successful!');
-      console.log(this.tmpArr);
-      console.log(this.tmpArr.length);
     }, error => {
       console.log(error);
     });

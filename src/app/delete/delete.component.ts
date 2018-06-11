@@ -35,30 +35,6 @@ export class DeleteComponent implements OnInit, OnDestroy {
 
   delete(event) {
     event.preventDefault();
-/*     const filePath = this.path;
-    console.log('tetetetetetetetetetetetete', filePath);
-    const payload = {
-      path: filePath + '/' + name,
-      };
-
-      let httpOptions;
-          httpOptions = {
-          headers: new HttpHeaders({
-              'Authorization': 'Bearer ' + this.dbxAuth.accessToken,
-              'Content-Type': 'application/json'
-               'data': JSON.stringify(payload),
-          })
-        };
-        console.log('testatatatatattaa', payload);
-
-        const makeDelete = this.deleteFile('https://api.dropboxapi.com/1/fileops/delete', payload, httpOptions);
-          makeDelete.subscribe((results: any) => {
-            alert('You have successfully deleted a file!');
-       },
-        error => {
-          console.error('error', error);
-        });
-        return makeDelete; */
         this.filesService.deleteFile(this.path);
   }
 
