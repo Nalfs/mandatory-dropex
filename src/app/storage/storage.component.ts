@@ -8,7 +8,7 @@ import { AuthService } from '../auth.service';
 import { FilesService } from '../files.service';
 import { StorageService } from '../storage.service';
 import { DbxAuth } from '../configs';
-import { splitClasses } from '@angular/compiler';
+import { LocalStorageMethods } from '../utils';
 
 // import { SearchComponent } from '../search/search.component'; Deleted by K
 
@@ -116,7 +116,7 @@ export class StorageComponent implements OnInit, OnDestroy {
         this.compEntries = inData;
 
         if (this.showFavorites) {
-            const data = this.getFavorites() || []; // Modified by K
+            const data = LocalStorageMethods.retrieve('entries') || []; // Modified by K
             this.renderData(data);
             this.storageService.deactivateShowFavorites();
         } else {
@@ -142,20 +142,6 @@ export class StorageComponent implements OnInit, OnDestroy {
             .catch(error => {
                 console.log(error);
             });
-
-        /*  for (const entry of response.entries) {
-               if (this.isImage(entry.path_lower)) {
-                 dbx.filesGetThumbnail({ path: entry.path_lower })
-                   .then((result) => {
-                     const fileUrl = URL.createObjectURL((<any> result).fileBlob);
-                     document.getElementById(entry.path_lower).setAttribute('src', fileUrl);
-                   })
-                   .catch(error => {
-                     console.error(error);
-                   });
-               }
-             } */
-
     // add to service ***** + remove this block*/
   }
 
@@ -184,46 +170,35 @@ export class StorageComponent implements OnInit, OnDestroy {
   }
 
   renderData(inEntries: Array<any>) {
-    // this.compEntries = inEntries;
-    this.inEntries = inEntries;
-    if (localStorage.getItem('entries') !== null) {
-      // this.starredItems = JSON.parse(localStorage.getItem('entries')) || [];
-      for (let i = 0; i < this.inEntries.length; i++) {
-        this.inEntries[i].starred = checkStars(this.inEntries[i]);
-        /* for (let n = 0; n < this.starredItems.length; n++) {
-                          if (this.compEntries[i].id === this.starredItems[n].id) {
-                            this.compEntries[i].starred = true;
-                          }
-                        } */
-      }
-    } else {
-      for (const entry of this.inEntries) {
-        entry.starred = false;
-      }
-    }
-    for (const entry of this.inEntries) {
-      if (this.isImage(entry.path_lower)) {
-        this.dbxConnection
-          .filesGetThumbnail({ path: entry.path_lower })
-          .then(result => {
-            const fileUrl = URL.createObjectURL((<any>result).fileBlob);
-            document
-              .getElementById(entry.path_lower)
-              .setAttribute('src', fileUrl);
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      }
-    }
-    console.log('storageComp-get entries outside', inEntries);
+   if (inEntries.length > 0) {
+     if (LocalStorageMethods.retrieve('entries') !== null) {
+       for (let i = 0; i < inEntries.length; i++) {
+         inEntries[i].starred = checkStars(inEntries[i]);
+       }
+     } else {
+       for (const entry of inEntries) {
+         entry.starred = false;
+       }
+     }
 
-  }
+     for (const entry of inEntries) {
+       if (this.isImage(entry.path_lower)) {
+         this.dbxConnection
+           .filesGetThumbnail({ path: entry.path_lower })
+           .then((result) => {
+             const fileUrl = URL.createObjectURL((<any>result).fileBlob);
+             document
+               .getElementById(entry.path_lower)
+               .setAttribute('src', fileUrl);
+           })
+           .catch((error) => {
+             console.error(error);
+           });
+       }
+     }
 
-  getFavorites() {
-    console.log('ok fav');
-    const data = JSON.parse(localStorage.getItem('entries'));
-    return data;
+     this.inEntries = inEntries;
+   }
   }
 
   isImage(fileName: string) {
@@ -261,34 +236,32 @@ export class StorageComponent implements OnInit, OnDestroy {
 
   addStar(id, event) {
     event.preventDefault();
-    this.starredItems = JSON.parse(localStorage.getItem('entries')) || [];
-    /* this.compEntries.find(item => item.id === id).starred = true;
-            console.log(this.compEntries);
-            this.starredItems.push({id: id, starred: true}); */
+    this.starredItems = LocalStorageMethods.retrieve('entries') || [];
     const foundItem = this.compEntries.find(item => item.id === id) || {};
     if (foundItem) {
       foundItem.starred = true;
       this.starredItems.push(foundItem);
-
-      localStorage.setItem('entries', JSON.stringify(this.starredItems));
+      LocalStorageMethods.store('entries', this.starredItems);
     }
   }
+
   delStar(id, event) {
     event.preventDefault();
-    // this.compEntries = JSON.parse(localStorage.getItem('entries'));
-    this.starredItems = JSON.parse(localStorage.getItem('entries')) || [];
-    this.compEntries.find(item => item.id === id).starred = false;
+    this.starredItems = LocalStorageMethods.retrieve('entries') || [];
+    this.inEntries.find(item => item.id === id).starred = false;
     this.starredItems = this.starredItems.filter(el => el.id !== id);
-    localStorage.setItem('entries', JSON.stringify(this.starredItems));
+    LocalStorageMethods.store('entries', this.starredItems);
   }
+
   ngOnDestroy() {
     this.dbxAuthSubscription.unsubscribe();
     this.fileStreamSubscription.unsubscribe();
+    this.showFavoritesSubscription.unsubscribe();
   }
 }
 
 function checkStars(inItem: any) {
-  const currentStartItems = JSON.parse(localStorage.getItem('entries'));
+  const currentStartItems = LocalStorageMethods.retrieve('entries') || [];
   const results = currentStartItems.filter(item => item.id === inItem.id) || [];
 
   return results.length > 0 ? true : false;
