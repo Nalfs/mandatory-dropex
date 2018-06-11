@@ -21,6 +21,7 @@
         <th>Name</th>
         <th>Last Modified</th>
         <th>Size</th>
+        <th>List (view as)</th>
       </tr>
     </thead>
     <tbody>
@@ -72,6 +73,11 @@
               <span>{{ item.size | fileSize }}</span>
             </div>
           </td>
+          <td>
+            <div>
+              <app-delete [path]="item.path_lower"></app-delete>
+              </div>
+        </td>
         </ng-template>
       </tr>
     </tbody>

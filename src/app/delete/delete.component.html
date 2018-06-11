@@ -1,0 +1,10 @@
+<div>
+  <div (click)="dropDown = !dropDown" class="dropbtn">...</div>
+    <div *ngIf="dropDown">
+      <a href="#" (click)="delete($event)">Delete</a>
+      <a href="#" >Download</a>
+      <a href="#">Get Starred</a>
+     </div>
+</div>
+
+
