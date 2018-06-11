@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
 import { NullTemplateVisitor } from '@angular/compiler';
+import { UrlMethods } from '../utils';
 
 @Component({
   selector: 'app-upload',
@@ -19,7 +20,6 @@ import { NullTemplateVisitor } from '@angular/compiler';
 export class UploadComponent implements OnInit {
     private dbxAuth: DbxAuth;
     private subscription: Subscription;
-    @Input() currentPath;
 
      files;
      filename = {
@@ -47,7 +47,7 @@ export class UploadComponent implements OnInit {
 
   upload() {
    // const filepath  = this.dropexService.getCurrentPath();
-    const filepath = this.currentPath;
+    const filepath = UrlMethods.decodeWithoutParams(this.router.url);
     /*  */
     const name = this.filename.name.split('\\').pop();
     const arg = {
