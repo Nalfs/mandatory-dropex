@@ -95,11 +95,6 @@ export class StorageComponent implements OnInit, OnDestroy {
           if (this.lastSearch.length > 2) {
             this.lastSearch = this.lastSearch.slice(-3);
           }
-         // console.log('this is second' , this.lastSearch[1].searchterm);
-          /* let i;
-           for (i = 0; i < this.lastSearch.length; i++) {
-             console.log('boom', this.lastSearch[i].metadata.name);
-           } */
         }
 
     }
@@ -222,7 +217,7 @@ export class StorageComponent implements OnInit, OnDestroy {
       }
     }
     console.log('storageComp-get entries outside', inEntries);
-    
+
   }
 
   getFavorites() {

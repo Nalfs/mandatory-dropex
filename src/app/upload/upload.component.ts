@@ -47,7 +47,7 @@ export class UploadComponent implements OnInit {
 
   upload() {
    // const filepath  = this.dropexService.getCurrentPath();
-    const filepath = this.currentPath;
+    const filepath = this.router.url;
     /*  */
     const name = this.filename.name.split('\\').pop();
     const arg = {
