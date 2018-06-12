@@ -196,7 +196,11 @@ export class StorageComponent implements OnInit, OnDestroy {
            });
        }
      }
-
+     console.log(inEntries);
+     /* const sortEntries = inEntries.sort((a, b) => {
+      return a.size - b.size;
+     });
+     console.log(sortEntries); */
      this.inEntries = inEntries;
    }
   }
