@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Dropbox } from 'dropbox';
@@ -22,14 +22,14 @@ export class StorageComponent implements OnInit, OnDestroy {
 
     private hasChanged = false; // -- new property by K --
     private currentUrl = ''; // -- new property by K --
-    public path; // Added by K for cheat :-P
-    storageSpace;
-    usedSpace;
-    spacePercentage;
-    imgUrl;
-    isStarred = false;
-    starredItems = [];
-    inEntries: Array<any> = [];
+    public path;
+    public storageSpace;
+    public usedSpace;
+    public spacePercentage;
+    // private imgUrl; // Deleted by K because we don't use
+    // private isStarred = false; // Deleted by K because we don't use
+    private starredItems = [];
+    public inEntries: Array<any> = [];
     // showLastSearch = false; // don't need because you can use this.showSearch -- K
     public lastSearch: Array<any> = []; // Modified by K
     private dbxAuth: DbxAuth;
