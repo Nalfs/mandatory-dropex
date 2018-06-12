@@ -5,12 +5,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../auth.service';
+import { StorageService } from '../storage.service';
 import { DbxAuth } from '../configs';
+import { LocalStorageMethods } from '../utils';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css']
+    selector: 'app-search',
+    templateUrl: './search.component.html',
+    styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit, OnDestroy {
 
@@ -25,91 +27,96 @@ export class SearchComponent implements OnInit, OnDestroy {
     lastSearch;
     showLastSearch = false;
 
-  constructor(private authService: AuthService,
-              private http: HttpClient,
-              private router: Router) {
+    constructor(private authService: AuthService,
+        private http: HttpClient,
+        private router: Router,
+        private storageService: StorageService) { }
 
+    ngOnInit() {
+        this.subscription = this.authService.getAuth()
+            .subscribe((auth) => this.dbxAuth = auth);
+    }
 
-  }
-
-  ngOnInit() {
-    this.subscription = this.authService.getAuth()
-                            .subscribe((auth) => this.dbxAuth = auth);
-
-    /* if (!this.dbxAuth.isAuth) {
-        this.router.navigate(['/auth']);
-    } */
-
-    /* if (sessionStorage.getItem('lastSearches') !== null) {
-      this.showLastSearch = !this.showLastSearch;
-      this.lastSearch = JSON.parse(sessionStorage.getItem('lastSearches'));
-      console.log('this is' , this.lastSearch);
-      this.lastSearch = this.lastSearch.slice(-3);
-      console.log('this is second' , this.lastSearch[1].searchterm);
-    } */
-  }
-
-  search(event) {
-    this.router.navigate(['/search']);
-    let httpOptions;
+    search(event) {
+        this.router.navigate(['?search']); // Edited by K
+        let httpOptions;
         httpOptions = {
-        headers: new HttpHeaders({
-            'Authorization': 'Bearer ' + this.dbxAuth.accessToken,
-            'Content-Type': 'application/json',
-        })
-      };
-      this.question = this.query;
+            headers: new HttpHeaders({
+                'Authorization': 'Bearer ' + this.dbxAuth.accessToken,
+                'Content-Type': 'application/json',
+            })
+        };
+        this.question = this.query;
 
-      const payload = {
-        'path': '',
-        'query': this.query,
-        'mode': 'filename_and_content'
+        const payload = {
+            'path': '',
+            'query': this.query,
+            'mode': 'filename_and_content'
 
 
-      };
+        };
 
         const tmp = this.http.post('https://api.dropboxapi.com/2/files/search', payload, httpOptions);
         tmp.subscribe((results: any) => {
-          console.log(results);
-          this.getMatches(results.matches);
-          const numbers = results.matches.length;
-          this.matches = numbers;
-          this.gotMatch = true;
-     },
-      error => {
-        console.error('error', error);
-      });
-      return tmp;
-  }
+            console.log(results);
+            this.getMatches(results.matches);
+            const numbers = results.matches.length;
+            this.matches = numbers;
+            this.gotMatch = true;
+        },
+            error => {
+                console.error('error', error);
+            });
+        return tmp;
+    }
 
-  getMatches (obj: Array<any>) {
-    this.compMatches = obj;
-    console.log(this.compMatches);
-    const save = this.compMatches;
-    save.forEach(function(e) { e.searchterm = this.question; }, this);
-    console.log(save);
-    sessionStorage.setItem('lastSearches', JSON.stringify(save));
-  }
+    getMatches(obj: Array<any>) {
+        this.compMatches = obj;
+        // console.log(this.compMatches); // Deleted by K
+        const save = this.compMatches;
+        save.forEach(function (e) { e.searchterm = this.question; }, this);
+        console.log('save', save);
+        sessionStorage.setItem('lastSearches', JSON.stringify(save));
 
-  downloadFile(filepath, filename, event) {
-    event.preventDefault();
-    const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+        // Added by K
+        if (obj.length > 0) {
+            this.storeSearchResults(obj);
+        }
+    }
 
-    dbx.filesDownload({ path: filepath})
-      .then((data) => {
-        console.log(data);
-        const fileurl = URL.createObjectURL((<any>data).fileBlob);
-        const a = document.createElement('a');
-        a.setAttribute('href', fileurl);
-        a.setAttribute('download', filename);
-        a.click();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+    // New method added by K
+    storeSearchResults(inData: Array<any>) {
+        const arrLength = inData.length;
+        let storedArray = [];
+        for (let i = 0; i < arrLength; i++) {
+            const newObjArr = [{...inData[i].metadata}];
+            storedArray = storedArray.concat(newObjArr);
+        }
 
-  ngOnDestroy() {
-      this.subscription.unsubscribe();
-  }
+        LocalStorageMethods.store('search-results', storedArray);
+        this.storageService.activateShowSearch();
+    }
+
+    // Don't use in the future
+    downloadFile(filepath, filename, event) {
+        event.preventDefault();
+        const dbx = new Dropbox({ accessToken: this.dbxAuth.accessToken });
+
+        dbx.filesDownload({ path: filepath })
+            .then((data) => {
+                console.log(data);
+                const fileurl = URL.createObjectURL((<any>data).fileBlob);
+                const a = document.createElement('a');
+                a.setAttribute('href', fileurl);
+                a.setAttribute('download', filename);
+                a.click();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 }

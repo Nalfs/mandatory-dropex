@@ -26,9 +26,8 @@ import { firebaseConfig } from './configs';
 import { DeleteComponent } from './delete/delete.component';
 
 const appRoutes = [
-    { path: 'auth', component: AuthComponent },
-    { path: 'logout', component: LogoutComponent},
-    { path: 'search', component: SearchComponent, canActivate: [AuthService] },
+    { path: 'auth:now', component: AuthComponent, pathMatch: 'full' },
+    { path: 'logout:now', component: LogoutComponent, pathMatch: 'full' },
     { path: '**', component: BoardComponent, canActivate: [AuthService] }
 ];
 

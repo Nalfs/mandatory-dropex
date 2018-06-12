@@ -4,10 +4,13 @@ import { Dropbox } from 'dropbox';
 
 import { AuthService } from '../auth.service';
 import { StorageService } from '../storage.service';
+import { FilesService } from '../files.service';
+
 import { DbxAuth } from '../configs';
 
 import { Router } from '@angular/router';
-import { getParamFromUrl } from '../utils';
+import { UrlMethods } from '../utils';
+
 
 @Component({
     selector: 'app-board',
@@ -21,7 +24,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     constructor(private authService: AuthService,
         private router: Router,
-        private storageService: StorageService) {}
+        private storageService: StorageService,
+        private filesService: FilesService) { }
 
     ngOnInit() {
         this.subscription = this.authService.getAuth()
@@ -30,6 +34,19 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    showHome(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Disable all other functions (Starred - Favorites, Deletes files, Search) -- Added by K
+        this.storageService.deactivateShowFavorites();
+        this.storageService.deactivateShowDeletes();
+        this.storageService.deactivateShowSearch();
+
+        // Active again data stream from service
+        this.filesService.getFiles(UrlMethods.decodeWithoutParams(this.router.url));
     }
 
     showFavorites(event) {

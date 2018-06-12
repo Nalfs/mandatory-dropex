@@ -40,7 +40,7 @@ export class AuthService {
 
     canActivate(): boolean {
         if (!this.dbxAuth.isAuth) {
-            this.router.navigate(['/auth']);
+            this.router.navigate(['/auth:now']);
             return false;
         }
         return true;
