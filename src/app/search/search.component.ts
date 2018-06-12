@@ -86,10 +86,15 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     // New method added by K
     storeSearchResults(inData: Array<any>) {
+        console.log(inData);
         const arrLength = inData.length;
         let storedArray = [];
         for (let i = 0; i < arrLength; i++) {
-            const newObjArr = [{...inData[i].metadata}];
+            // Data structure changed
+            const newObjArr = [
+                {...inData[i].metadata,
+                searchterm: inData[i].searchterm}
+            ];
             storedArray = storedArray.concat(newObjArr);
         }
 

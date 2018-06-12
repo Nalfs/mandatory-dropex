@@ -30,8 +30,8 @@ export class StorageComponent implements OnInit, OnDestroy {
     isStarred = false;
     starredItems = [];
     inEntries: Array<any> = [];
-    showLastSearch = false;
-    lastSearch;
+    // showLastSearch = false; // don't need because you can use this.showSearch -- K
+    public lastSearch: Array<any> = []; // Modified by K
     private dbxAuth: DbxAuth;
     private dbxAuthSubscription: Subscription;
     private fileStreamSubscription: Subscription;
@@ -43,7 +43,7 @@ export class StorageComponent implements OnInit, OnDestroy {
     private showDeletes = false;
     private showDeletesSubscription: Subscription;
 
-    private showSearch = false;
+    public showSearch = false;
     private showSearchSubscription: Subscription;
 
     constructor(private authService: AuthService,
@@ -88,7 +88,7 @@ export class StorageComponent implements OnInit, OnDestroy {
                 if (status) {
                     const data = this.filesService.deletedData();
                     this.showCustomData(data); // Continue code for this function here<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                 }
+                }
             });
 
         // Added by K
@@ -110,6 +110,8 @@ export class StorageComponent implements OnInit, OnDestroy {
                 this.checkHasChanged();
             });
         // -- End new --
+
+        /* Deleted by K
         if (sessionStorage.getItem('lastSearches') !== null) {
             this.showLastSearch = !this.showLastSearch;
             this.lastSearch = JSON.parse(sessionStorage.getItem('lastSearches'));
@@ -117,7 +119,7 @@ export class StorageComponent implements OnInit, OnDestroy {
             if (this.lastSearch.length > 2) {
                 this.lastSearch = this.lastSearch.slice(-3);
             }
-        }
+        } */
     }
 
     // New method to auto rerender this component
@@ -131,6 +133,7 @@ export class StorageComponent implements OnInit, OnDestroy {
         }
     }
     // -- End new --
+
     updateFileStream(inData: Array<any>) {
         if (!this.showFavorites && !this.showSearch && !this.showDeletes) {
             this.compEntries = inData;
@@ -154,7 +157,7 @@ export class StorageComponent implements OnInit, OnDestroy {
                 objDeleteArr.push({
                     name: name,
                     path_lower: ''
-               });
+                });
             });
             this.renderData(objDeleteArr);
             this.storageService.deactivateShowDeletes();
@@ -208,7 +211,27 @@ export class StorageComponent implements OnInit, OnDestroy {
             });
     }
 
+    // Get latest search results -- Added by K
+    retrieveLatestSearch() {
+        const numberOfSearchResults = 3; // You decide yourself how many you want
+        let searchResults = this.filesService.searchResults();
+        const arrLength = searchResults.length;
+        if (arrLength > 0) {
+            if (arrLength > numberOfSearchResults) {
+                searchResults = searchResults.slice(0, numberOfSearchResults);
+            }
+            this.lastSearch = searchResults;
+        }
+    }
+
     renderData(inEntries: Array<any>) {
+        /* Run HERE this method to retrieve exactly the latest search results
+           before you render data */
+        this.retrieveLatestSearch();
+
+        // You can use the latest results by using this.lastSearch
+        console.log('The latest search results', this.lastSearch);
+
         console.log('render', inEntries);
         if (inEntries.length > 0) {
             if (LocalStorageMethods.retrieve('entries') !== null) {
