@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Dropbox } from 'dropbox';
 
 import { AuthService } from '../auth.service';
 import { StorageService } from '../storage.service';
@@ -8,22 +7,17 @@ import { FilesService } from '../files.service';
 
 import { DbxAuth } from '../configs';
 
-import { Router } from '@angular/router';
-import { UrlMethods } from '../utils';
-
-
 @Component({
     selector: 'app-board',
     templateUrl: './board.component.html',
     styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit, OnDestroy {
-    private dbxAuth: DbxAuth;
+    public dbxAuth: DbxAuth;
     private subscription: Subscription;
 
 
     constructor(private authService: AuthService,
-        private router: Router,
         private storageService: StorageService,
         private filesService: FilesService) { }
 
@@ -46,7 +40,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.storageService.deactivateShowSearch();
 
         // Active again data stream from service
-        this.filesService.getFiles(UrlMethods.decodeWithoutParams(this.router.url));
+        this.filesService.getFiles('');
     }
 
     showFavorites(event) {

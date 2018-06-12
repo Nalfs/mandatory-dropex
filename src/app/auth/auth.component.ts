@@ -13,7 +13,7 @@ import { AuthService } from '../auth.service';
     styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit, OnDestroy {
-    private dbxAuth: DbxAuth;
+    public dbxAuth: DbxAuth;
     private subscription: Subscription;
 
     constructor(private authService: AuthService, private router: Router) { }
