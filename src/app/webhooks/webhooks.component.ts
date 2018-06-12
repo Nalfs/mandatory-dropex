@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 import { AngularFireDatabase } from 'angularfire2/database';
 
@@ -29,8 +28,7 @@ export class WebhooksComponent implements OnInit, OnDestroy {
     constructor(private notificationService: NotificationService,
                 private http: HttpClient,
                 private db: AngularFireDatabase,
-                private authService: AuthService,
-                private router: Router) {}
+                private authService: AuthService) {}
 
     ngOnInit() {
         this.subscription = this.authService.getAuth()
@@ -54,6 +52,7 @@ export class WebhooksComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.subscription.unsubscribe();
         this.notiSubscription.unsubscribe();
         this.changeSubscription.unsubscribe();
     }
@@ -132,8 +131,7 @@ export class WebhooksComponent implements OnInit, OnDestroy {
                 if (results !== {}) {
                     this.latestCursor = results.cursor;
                 }
-            },
-            (error) => { console.log(error); }
+            }, (error) => { console.log(error); }
         );
     }
 
@@ -144,9 +142,7 @@ export class WebhooksComponent implements OnInit, OnDestroy {
                 'Content-Type': 'application/json',
             })
         };
-        const payload = {
-            'cursor': this.latestCursor,
-        };
+        const payload = { 'cursor': this.latestCursor };
         const makePost = this.http.post(dropboxApi.filesListFolderContinue, payload, httpOptions);
         makePost.subscribe(
             (results: any) => {
@@ -161,8 +157,7 @@ export class WebhooksComponent implements OnInit, OnDestroy {
                     // Request again the latest cursor to make new point for tracking changes
                     this.requestLatestCursor();
                 }
-            },
-            (error) => { console.log(error); }
+            }, (error) => { console.log(error); }
         );
     }
 
