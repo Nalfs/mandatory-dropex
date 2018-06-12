@@ -26,7 +26,9 @@
 </div> 
 
 <div *ngIf="gotMatch"> {{'We found '+ matches + ' matches of your results' }}</div>
-<div *ngFor="let match of compMatches">
+
+<!-- Disabled by K -->
+<!-- <div *ngFor="let match of compMatches">
   <ng-template *ngIf="match.metadata['.tag'] === 'folder';then thenBlock; else elseBlock">
   </ng-template>
   <ng-template #thenBlock>
@@ -36,4 +38,4 @@
   <ng-template #elseBlock>
       <a (click)="downloadFile(match.metadata.path_lower, match.metadata.name, $event)" href=""> {{ match.metadata.name }} </a>
     </ng-template>
-</div>
+</div> -->

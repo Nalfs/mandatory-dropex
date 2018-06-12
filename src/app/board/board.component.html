@@ -4,7 +4,7 @@
 
 
 <ng-template #thenBlock>
-  <a routerLink="/auth" routerLinkActive="active">Go to Auth</a>
+    <a routerLink="/auth" routerLinkActive="active">Go to Auth</a>
 </ng-template>
 
 <!-- <ng-template #elseBlock>
@@ -41,47 +41,54 @@
   </div>
 </ng-template> -->
 <ng-template #elseBlock>
-  <div class="page-container">
-    <div class="sidebar">
-      <ul class="nav">
-        <li class="nav-bar-brand">
-          <a routerLink="">
-            <i class="fab fa-dropbox fa-3x"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a routerLink="" class="nav-link active">
-            <i class="far fa-file"></i>
-            Files
-          </a>
-        </li>
-        <li class="nav-item">
-          <!-- <a class="nav-link" routerLink="/stars" href="?status=favo"> Deleted by K -->
-          <a class="nav-link" routerLink="/?stars" (click)="showFavorites($event)">
-            <!-- K added -->
-            <i class="far fa-star"></i>
-            Starred
-          </a>
-        </li>
-        <li class="nav-item">
+    <div class="page-container">
+        <div class="sidebar">
+            <ul class="nav">
+                <li class="nav-bar-brand">
+                    <a routerLink="">
+                        <i class="fab fa-dropbox fa-3x"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="" class="nav-link active" routerLinkActive="active" (click)="showHome($event)">
+                        <i class="far fa-file"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <!-- <a class="nav-link" routerLink="/stars" href="?status=favo"> Deleted by K -->
+                    <a class="nav-link" routerLink="./" (click)="showFavorites($event)">
+                        <!-- K added -->
+                        <i class="far fa-star"></i>
+                        Starred
+                    </a>
+                </li>
+                <li class="nav-item">
 
-          <a class="nav-link" routerLink="/logout" routerLinkActive="active">
-            <i class="fas fa-sign-out-alt"></i>
-            Sign out!
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="main">
-      <!-- <app-breadcrumbs></app-breadcrumbs>
-      <app-search></app-search> 
-      <app-upload></app-upload> -->
-      <app-webhooks></app-webhooks>
-      <div class="storage-container">
-        <app-storage></app-storage>
-      </div>
-    </div>
+                    <a class="nav-link" routerLink="/logout:now">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sign out!
+                    </a>
+                </li>
+                <li class="nav-item">
 
-  </div>
+                    <a class="nav-link" routerLink="./" (click)="showDeletes($event)">
+                        <i class="fas fa-delete"></i>
+                        Deleted files
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="main">
+            <!-- <app-breadcrumbs></app-breadcrumbs>
+            <app-search></app-search> 
+            <app-upload></app-upload> -->
+            <app-webhooks></app-webhooks>
+            <div class="storage-container">
+                <app-storage></app-storage>
+            </div>
+        </div>
+
+    </div>
 </ng-template>
 <!-- <app-upload [currentPath]="currentPath"></app-upload> Deactivated by K-->

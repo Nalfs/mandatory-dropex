@@ -8,23 +8,23 @@ import { AuthService } from '../auth.service';
 import { FilesService } from '../files.service';
 import { StorageService } from '../storage.service';
 import { DbxAuth } from '../configs';
-import { LocalStorageMethods } from '../utils';
+import { LocalStorageMethods, UrlMethods } from '../utils';
 
 // import { SearchComponent } from '../search/search.component'; Deleted by K
 
 @Component({
-  selector: 'app-storage',
-  templateUrl: './storage.component.html',
-  styleUrls: ['./storage.component.css']
+    selector: 'app-storage',
+    templateUrl: './storage.component.html',
+    styleUrls: ['./storage.component.css']
 })
 export class StorageComponent implements OnInit, OnDestroy {
-  /* @Input() path: string;
-    @Input() status: string; */ /* Deleted by K */
+    /* @Input() path: string;
+      @Input() status: string; */ /* Deleted by K */
 
     private hasChanged = false; // -- new property by K --
     private currentUrl = ''; // -- new property by K --
 
-    path; // Added by K for cheat :-P
+    public path; // Added by K for cheat :-P
     storageSpace;
     usedSpace;
     spacePercentage;
@@ -42,6 +42,11 @@ export class StorageComponent implements OnInit, OnDestroy {
 
     private showFavorites = false;
     private showFavoritesSubscription: Subscription;
+    private showDeletes = false;
+    private showDeletesSubscription: Subscription;
+
+    private showSearch = false;
+    private showSearchSubscription: Subscription;
 
     constructor(private authService: AuthService,
         private activatedRoute: ActivatedRoute,
@@ -58,25 +63,43 @@ export class StorageComponent implements OnInit, OnDestroy {
         this.dbxConnection = new Dropbox({ accessToken: this.dbxAuth.accessToken });
 
         this.activatedRoute.url.subscribe(() => {
-            const urlWithoutParams = decodeURIComponent(this.router.url).split('?')[0];
-            const paths = this.filesService.getFiles(urlWithoutParams);
-            if (this.currentUrl === '/') {
-                this.currentUrl = '';
-            }
-            this.currentUrl = urlWithoutParams;
-            console.log('this.currentUrl', this.currentUrl);
+            this.currentUrl = UrlMethods.decodeWithoutParams(this.router.url);
+            // const paths = this.filesService.getFiles(this.currentUrl); // Deleted by K
+            this.filesService.getFiles(this.currentUrl);
+            console.log('Current URL', this.currentUrl);
         });
 
-        this.fileStreamSubscription = this.filesService.stream.subscribe(
-            entries => {
+        this.fileStreamSubscription = this.filesService.stream
+            .subscribe((entries) => {
                 this.updateFileStream(entries);
-            }
-        );
+            });
 
         this.showFavoritesSubscription = this.storageService.showFavorites()
             .subscribe((status) => {
                 this.showFavorites = status;
                 console.log('showFavorites', this.showFavorites);
+                if (status) {
+                    const results = this.filesService.favaritesResults();
+                    this.showCustomData(results);
+                }
+            });
+
+        this.showDeletesSubscription = this.storageService.showDeletes()
+            .subscribe((status) => {
+                this.showDeletes = status;
+                console.log('showDeletes', this.showDeletes);
+                this.showCustomData([]); // Continue code for this function here
+            });
+
+        // Added by K
+        this.showSearchSubscription = this.storageService.showSearch()
+            .subscribe((status) => {
+                this.showSearch = status;
+                console.log('showSearch', this.showSearch);
+                if (status) {
+                    const results = this.filesService.searchResults();
+                    this.showCustomData(results);
+                }
             });
 
         // New code to auto rerender this component
@@ -84,19 +107,18 @@ export class StorageComponent implements OnInit, OnDestroy {
         this.notificationService.checkHasChange()
             .subscribe(changed => {
                 this.hasChanged = changed;
-                console.log('this.hasChanged', this.hasChanged);
                 this.checkHasChanged();
             });
         // -- End new --
-        if (sessionStorage.getItem('lastSearches') !== null) {
-          this.showLastSearch = !this.showLastSearch;
-          this.lastSearch = JSON.parse(sessionStorage.getItem('lastSearches'));
-          console.log('this is' , this.lastSearch);
-          if (this.lastSearch.length > 2) {
-            this.lastSearch = this.lastSearch.slice(-3);
-          }
-        }
 
+        if (sessionStorage.getItem('lastSearches') !== null) {
+            this.showLastSearch = !this.showLastSearch;
+            this.lastSearch = JSON.parse(sessionStorage.getItem('lastSearches'));
+            console.log('this is', this.lastSearch);
+            if (this.lastSearch.length > 2) {
+                this.lastSearch = this.lastSearch.slice(-3);
+            }
+        }
     }
 
     // New method to auto rerender this component
@@ -112,24 +134,34 @@ export class StorageComponent implements OnInit, OnDestroy {
     // -- End new --
 
     updateFileStream(inData: Array<any>) {
-        console.log('showFavorites-stream', this.showFavorites);
-        this.compEntries = inData;
-
-        if (this.showFavorites) {
-            const data = LocalStorageMethods.retrieve('entries') || []; // Modified by K
-            this.renderData(data);
-            this.storageService.deactivateShowFavorites();
-        } else {
+        if (!this.showFavorites && !this.showSearch && !this.showDeletes) {
+            this.compEntries = inData;
             this.getData();
             this.renderData(this.compEntries);
         }
     }
 
+    showCustomData(inData: Array<any>) {
+        if (this.showFavorites) {
+            this.renderData(inData);
+            this.storageService.deactivateShowFavorites();
+        } else if (this.showSearch) {
+            this.renderData(inData);
+            this.storageService.deactivateShowSearch();
+        } else if (this.showDeletes) {
+            console.log('Show all deleted files or folders here');
+            // code to render data here
+            this.storageService.deactivateShowDeletes();
+        }
+    }
+
     getData() {
-        const localPath = this.path ? '/' + this.path : '';
+        // Declared but never use -- Commented by K
+        /* const localPath = this.path ? '/' + this.path : '';
         const entries = {
             entries: [{ path: '/appar/', format: 'jpeg', size: 'w64h64' }]
-        };
+        }; */
+
         this.dbxConnection
             .usersGetSpaceUsage(null)
             .then(spaceInfo => {
@@ -142,131 +174,147 @@ export class StorageComponent implements OnInit, OnDestroy {
             .catch(error => {
                 console.log(error);
             });
-    // add to service ***** + remove this block*/
-  }
+    }
 
-  previewFile(event) {
-    console.log(event.target.innerText);
-  }
+    /* Declared but never use -- Commented by K
+    previewFile(event) {
+        console.log(event.target.innerText);
+    }
+    */
 
-  downloadFile(filepath, filename, event) {
-    event.preventDefault();
-    this.dbxConnection
-      .filesDownload({ path: filepath })
-      .then(data => {
-        console.log(data);
-        const fileurl = URL.createObjectURL((<any>data).fileBlob);
-        const a = document.createElement('a');
-        if (this.isImage(data.path_lower)) {
-          console.log('is image');
+    downloadFile(filepath, filename, event) {
+        event.preventDefault();
+        this.dbxConnection
+            .filesDownload({ path: filepath })
+            .then(data => {
+                console.log(data);
+                const fileurl = URL.createObjectURL((<any>data).fileBlob);
+                const a = document.createElement('a');
+                if (this.isImage(data.path_lower)) {
+                    console.log('is image');
+                }
+                a.setAttribute('href', fileurl);
+                a.setAttribute('download', filename);
+                a.click();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    renderData(inEntries: Array<any>) {
+        console.log('render', inEntries);
+        if (inEntries.length > 0) {
+            if (LocalStorageMethods.retrieve('entries') !== null) {
+                for (let i = 0; i < inEntries.length; i++) {
+                    inEntries[i].starred = checkStars(inEntries[i]);
+                }
+            } else {
+                for (const entry of inEntries) {
+                    entry.starred = false;
+                }
+            }
+
+            for (const entry of inEntries) {
+                if (this.isImage(entry.path_lower)) {
+                    this.dbxConnection
+                        .filesGetThumbnail({ path: entry.path_lower })
+                        .then((result) => {
+                            const fileUrl = URL.createObjectURL((<any>result).fileBlob);
+                            console.log('File URL', fileUrl); // Added by K for testing
+                            document
+                                .getElementById(entry.path_lower)
+                                .setAttribute('src', fileUrl);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                }
+            }
+
+            this.inEntries = inEntries;
         }
-        a.setAttribute('href', fileurl);
-        a.setAttribute('download', filename);
-        a.click();
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
-
-  renderData(inEntries: Array<any>) {
-   if (inEntries.length > 0) {
-     if (LocalStorageMethods.retrieve('entries') !== null) {
-       for (let i = 0; i < inEntries.length; i++) {
-         inEntries[i].starred = checkStars(inEntries[i]);
-       }
-     } else {
-       for (const entry of inEntries) {
-         entry.starred = false;
-       }
-     }
-
-     for (const entry of inEntries) {
-       if (this.isImage(entry.path_lower)) {
-         this.dbxConnection
-           .filesGetThumbnail({ path: entry.path_lower })
-           .then((result) => {
-             const fileUrl = URL.createObjectURL((<any>result).fileBlob);
-             document
-               .getElementById(entry.path_lower)
-               .setAttribute('src', fileUrl);
-           })
-           .catch((error) => {
-             console.error(error);
-           });
-       }
-     }
-     console.log(inEntries);
-     /* const sortEntries = inEntries.sort((a, b) => {
-      return a.size - b.size;
-     });
-     console.log(sortEntries); */
-     this.inEntries = inEntries;
-   }
-  }
-
-  isImage(fileName: string) {
-    const supportedImages = ['jpg', 'jpeg', 'png', 'tiff', 'tif', 'gif', 'bmp'];
-    const fileEnding = fileName.split('.').pop();
-    if (supportedImages.some(imgType => imgType === fileEnding)) {
-      return true;
     }
-  }
 
-  getFileType(fileName: string) {
-    const fileEnding = fileName.split('.').pop();
-    let fileType;
-    switch (fileEnding) {
-      case 'pdf':
-        fileType = 'fas fa-file-pdf fa-2x';
-        break;
-      case 'docx' || 'docx':
-        fileType = 'fas fa-file-word fa-2x';
-        break;
-      case 'pptx':
-        fileType = 'fas fa-file-powerpoint fa-2x';
-        break;
-      case 'xlsx':
-        fileType = 'fas fa-file-excel fa-2x';
-        break;
-      case 'html' || 'js':
-        fileType = 'fas fa-file-code fa-2x';
-        break;
-      default:
-        fileType = 'fa fa-file fa-2x';
+    isImage(fileName: string) {
+        if (fileName !== '' && fileName.length > 4) { // Fixed bug by K
+            const supportedImages = ['jpg', 'jpeg', 'png', 'tiff', 'tif', 'gif', 'bmp'];
+            const fileEnding = fileName.split('.').pop();
+            if (supportedImages.some(imgType => imgType === fileEnding)) {
+                return true;
+            }
+        }
+        return false;
     }
-    return fileType;
-  }
 
-  addStar(id, event) {
-    event.preventDefault();
-    this.starredItems = LocalStorageMethods.retrieve('entries') || [];
-    const foundItem = this.compEntries.find(item => item.id === id) || {};
-    if (foundItem) {
-      foundItem.starred = true;
-      this.starredItems.push(foundItem);
-      LocalStorageMethods.store('entries', this.starredItems);
+    getFileType(fileName: string) {
+        if (fileName !== '' && fileName.length > 4) { // Fixed bug by K
+            const fileEnding = fileName.split('.').pop();
+            let fileType = ''; // Fixed bug by K
+            switch (fileEnding) {
+                case 'pdf':
+                    fileType = 'fas fa-file-pdf fa-2x';
+                    break;
+                case 'docx' || 'docx':
+                    fileType = 'fas fa-file-word fa-2x';
+                    break;
+                case 'pptx':
+                    fileType = 'fas fa-file-powerpoint fa-2x';
+                    break;
+                case 'xlsx':
+                    fileType = 'fas fa-file-excel fa-2x';
+                    break;
+                case 'html' || 'js':
+                    fileType = 'fas fa-file-code fa-2x';
+                    break;
+                default:
+                    fileType = 'fa fa-file fa-2x';
+            }
+            return fileType;
+        }
+        return false;
     }
-  }
 
-  delStar(id, event) {
-    event.preventDefault();
-    this.starredItems = LocalStorageMethods.retrieve('entries') || [];
-    this.inEntries.find(item => item.id === id).starred = false;
-    this.starredItems = this.starredItems.filter(el => el.id !== id);
-    LocalStorageMethods.store('entries', this.starredItems);
-  }
+    addStar(id, event) {
+        event.preventDefault();
+        this.starredItems = LocalStorageMethods.retrieve('entries') || [];
+        const foundItem = this.compEntries.find(item => item.id === id) || {};
+        if (foundItem) {
+            foundItem.starred = true;
+            this.starredItems.push(foundItem);
+            LocalStorageMethods.store('entries', this.starredItems);
+        }
+    }
 
-  ngOnDestroy() {
-    this.dbxAuthSubscription.unsubscribe();
-    this.fileStreamSubscription.unsubscribe();
-    this.showFavoritesSubscription.unsubscribe();
-  }
+    delStar(id, event) {
+        event.preventDefault();
+
+        // Clear item in this.inEntries
+        const foundItem = this.inEntries.find(item => item.id === id);
+        if (foundItem) { // Fixed bug by K
+            foundItem.starred = false;
+        }
+
+        // Clear item in localStorage
+        this.starredItems = LocalStorageMethods.retrieve('entries') || [];
+        this.starredItems = this.starredItems.filter(el => el.id !== id);
+
+        // Store back to localStorage
+        LocalStorageMethods.store('entries', this.starredItems);
+    }
+
+    ngOnDestroy() {
+        this.dbxAuthSubscription.unsubscribe();
+        this.fileStreamSubscription.unsubscribe();
+        this.showFavoritesSubscription.unsubscribe();
+        this.showDeletesSubscription.unsubscribe();
+        this.showSearchSubscription.unsubscribe();
+    }
 }
 
 function checkStars(inItem: any) {
-  const currentStartItems = LocalStorageMethods.retrieve('entries') || [];
-  const results = currentStartItems.filter(item => item.id === inItem.id) || [];
+    const currentStartItems = LocalStorageMethods.retrieve('entries') || [];
+    const results = currentStartItems.filter(item => item.id === inItem.id) || [];
 
-  return results.length > 0 ? true : false;
+    return results.length > 0 ? true : false;
 }
