@@ -17,7 +17,7 @@ export class FilesService {
     private subscription: Subscription;
     stream;
     dbx;
-    tmpArr = [];
+    deletedItems = [];
 
     constructor(
         private authService: AuthService,
@@ -49,11 +49,18 @@ export class FilesService {
         this.dbx.filesDeleteV2({ path: decodeURI(path) })
             .then(response => {
                 this.getFiles(path.substring(0, path.lastIndexOf('/')));
-                this.tmpArr.push(response.metadata.name);
+                this.deletedItems.push(response.metadata.name);
                 alert('Your delete was successful!');
+                localStorage.setItem('items', JSON.stringify(this.deletedItems));
+               /*  const data = JSON.parse(localStorage.getItem('items')); */
             }, error => {
                 console.log(error);
             });
+    }
+
+    // new method added by Kenneth 'Kuken' Nilsson
+    deletedData(): Array<any> {
+        return JSON.parse(localStorage.getItem('items')) || [];
     }
 
     // New methods added by K

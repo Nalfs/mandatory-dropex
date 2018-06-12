@@ -88,7 +88,10 @@ export class StorageComponent implements OnInit, OnDestroy {
             .subscribe((status) => {
                 this.showDeletes = status;
                 console.log('showDeletes', this.showDeletes);
-                this.showCustomData([]); // Continue code for this function here
+                if (status) {
+                    const data = this.filesService.deletedData();
+                    this.showCustomData(data); // Continue code for this function here<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                 }
             });
 
         // Added by K
@@ -150,7 +153,15 @@ export class StorageComponent implements OnInit, OnDestroy {
             this.storageService.deactivateShowSearch();
         } else if (this.showDeletes) {
             console.log('Show all deleted files or folders here');
-            // code to render data here
+            // code to render data here<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            const objDeleteArr: Array<any> = [];
+            inData.forEach(name => {
+                objDeleteArr.push({
+                    name: name,
+                    path_lower: ''
+               });
+            });
+            this.renderData(objDeleteArr);
             this.storageService.deactivateShowDeletes();
         }
     }
