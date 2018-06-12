@@ -15,6 +15,10 @@ div:hover {
     border: 1px solid #d0d0d0;
     
 }
+a {
+    text-decoration: none;
+    display: block;
+}
 
 /* .dropdown-content {
     display: none;
