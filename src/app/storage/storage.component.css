@@ -26,8 +26,7 @@ table i {
 
 }
 .table {
-  width: 600px;
-  max-width: 700px;
+  width: 70%; /* will come back */
   color: #5d5858;
   background-color: /*#f9f9f9 #fcfcfc66*/ #fff6;
 }
@@ -75,14 +74,26 @@ tr:hover .fav {
   display: flex;
   justify-content: space-between;
 }
+
 .lastsearch {
-  width: 200px;
+  padding: 10px;
+  width: 100%;
   border: 1px solid rgba(128, 128, 128, 0.24);
   box-shadow: 0 1px 2px grey;
   word-break: break-all; /* Added by K */
 }
 .lastsearch table, .lastsearch p {
-  width: 160px;
   margin: 5px auto;
   font-size: 14px;
+  word-break: break-all;
+}
+.lastsearch table {
+  width: 90%;
+  color: #5d5858;
+}
+
+.main-content {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }
