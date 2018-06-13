@@ -10,7 +10,7 @@ td a:link a:visited {
 td div {
   white-space: no-wrap;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  
 }
 
 .table thead th {
@@ -22,6 +22,8 @@ td div {
 table a,
 table i {
   vertical-align: middle;
+  word-break: break-all; /* Added by K */
+
 }
 .table {
   width: 600px;
