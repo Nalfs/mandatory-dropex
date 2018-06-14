@@ -1,8 +1,4 @@
-<!-- <div *ngIf="showLastSearch">
-  <h3>Your last searchterm & search results</h3>
-  Keyword: {{lastSearch[0].searchterm}}
-  <div *ngFor="let search of lastSearch">{{search.metadata.name}}</div>
-</div> -->
+
 <div class="searchContainer">
   <form #form="ngForm" class="form-group">
     <!-- <label for="search">Search</label> -->
@@ -26,16 +22,3 @@
 </div> 
 
 <div *ngIf="gotMatch"> {{'We found '+ matches + ' matches of your results' }}</div>
-
-<!-- Disabled by K -->
-<!-- <div *ngFor="let match of compMatches">
-  <ng-template *ngIf="match.metadata['.tag'] === 'folder';then thenBlock; else elseBlock">
-  </ng-template>
-  <ng-template #thenBlock>
-      <a href="/?path={{match.metadata.path_lower}}">{{ match.metadata.name }}</a>
-  </ng-template>
-
-  <ng-template #elseBlock>
-      <a (click)="downloadFile(match.metadata.path_lower, match.metadata.name, $event)" href=""> {{ match.metadata.name }} </a>
-    </ng-template>
-</div> -->
