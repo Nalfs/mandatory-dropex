@@ -16,27 +16,50 @@ export class AuthComponent implements OnInit, OnDestroy {
     public dbxAuth: DbxAuth;
     private subscription: Subscription;
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private authService: AuthService, private router: Router) {
+    }
 
     ngOnInit() {
         // Get credentials from service and keep data updated
         this.subscription = this.authService.getAuth()
-                                            .subscribe((auth) => this.dbxAuth = auth);
+            .subscribe((auth) => this.dbxAuth = auth);
 
         // Begin authentication process if credentials not found
         if (!this.dbxAuth.isAuth) {
-            const objParams = getAuthObj(); // Get authentication from URL and create auth object
+            const authUrl = this.router.url;
+            const parameters = authUrl.split('#')[1] || '';
+            if (parameters.length > 0) {
+                const arrParams = parameters.split('&') || [];
+                if (arrParams.length > 0) {
+                    const authObj: DbxAuth = { isAuth: false };
+                    for (let i = 0; i < arrParams.length; i++) {
+                        const arrItem = arrParams[i].split('=');
+                        switch (arrItem[0]) {
+                            case 'access_token':
+                                authObj.accessToken = arrItem[1];
+                                break;
+                            case 'token_type':
+                                authObj.tokenType = arrItem[1];
+                                break;
+                            case 'uid':
+                                authObj.uid = arrItem[1];
+                                break;
+                            case 'account_id':
+                                authObj.accountId = arrItem[1];
+                                break;
+                            default:
+                                break;
+                        }
+                    }
 
-            // Create and store dbxAuth object for this app
-            this.dbxAuth = {accessToken: objParams.access_token,
-                            tokenType: objParams.token_type,
-                            uid: objParams.uid,
-                            accountId: objParams.account_id,
-                            isAuth: objParams.access_token &&
-                                    objParams.token_type &&
-                                    objParams.uid &&
-                                    objParams.account_id ? true : false
-                        };
+                    if (authObj.accessToken && authObj.tokenType && authObj.uid && authObj.accountId) {
+                        authObj.isAuth = true;
+                        this.dbxAuth = authObj;
+                    }
+
+                    console.log('authObj', authObj);
+                }
+            }
 
             // Store credentials into Auth-service and into localStorage
             if (this.dbxAuth.isAuth) {
@@ -54,9 +77,9 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     handleAuthorization() {
         const urlAuth = `https://www.dropbox.com/oauth2/authorize?`
-                        + `client_id=${dropboxConfig.clientId}`
-                        + `&redirect_uri=${dropboxConfig.redirectUri}`
-                        + `&response_type=${dropboxConfig.responseType}`;
+            + `client_id=${dropboxConfig.clientId}`
+            + `&redirect_uri=${dropboxConfig.redirectUri}`
+            + `&response_type=${dropboxConfig.responseType}`;
         window.location.href = urlAuth;
     }
 }
