@@ -1,5 +1,5 @@
 # Dropbox Explorer - DropEx
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) v6.0.8. You may want to know about how you can [start here](ANGULAR.md)  and view [online demo here](https://ec-dropex.firebaseapp.com/).
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) v6.0.8. You may want to know about how you can [start here](ANGULAR.md), view [online demo here](https://ec-dropex.firebaseapp.com/) and [sketchboard](https://sketchboard.me/lA0SWJEBeaSJ#/).
 
 You may want to view about these things in this project:
 * [Angular v6.0.4](https://blog.angular.io/version-6-of-angular-now-available-cc56b0efa7a4)  and [RxJS v6.2.0](https://github.com/ReactiveX/rxjs/blob/master/MIGRATION.md)
