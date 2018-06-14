@@ -17,20 +17,14 @@ import { LocalStorageMethods, UrlMethods } from '../utils';
     styleUrls: ['./storage.component.css']
 })
 export class StorageComponent implements OnInit, OnDestroy {
-    /* @Input() path: string;
-      @Input() status: string; */ /* Deleted by K */
-
     private hasChanged = false; // -- new property by K --
     private currentUrl = ''; // -- new property by K --
     public path;
     public storageSpace;
     public usedSpace;
     public spacePercentage;
-    // private imgUrl; // Deleted by K because we don't use
-    // private isStarred = false; // Deleted by K because we don't use
     private starredItems = [];
     public inEntries: Array<any> = [];
-    // showLastSearch = false; // don't need because you can use this.showSearch -- K
     public lastSearch: Array<any> = []; // Modified by K
     private dbxAuth: DbxAuth;
     private dbxAuthSubscription: Subscription;
@@ -61,7 +55,6 @@ export class StorageComponent implements OnInit, OnDestroy {
 
         this.activatedRoute.url.subscribe(() => {
             this.currentUrl = UrlMethods.decodeWithoutParams(this.router.url);
-            // const paths = this.filesService.getFiles(this.currentUrl); // Deleted by K
             this.filesService.getFiles(this.currentUrl);
             console.log('Current URL', this.currentUrl);
         });
@@ -111,15 +104,6 @@ export class StorageComponent implements OnInit, OnDestroy {
             });
         // -- End new --
 
-        /* Deleted by K
-        if (sessionStorage.getItem('lastSearches') !== null) {
-            this.showLastSearch = !this.showLastSearch;
-            this.lastSearch = JSON.parse(sessionStorage.getItem('lastSearches'));
-            console.log('this is', this.lastSearch);
-            if (this.lastSearch.length > 2) {
-                this.lastSearch = this.lastSearch.slice(-3);
-            }
-        } */
     }
 
     // New method to auto rerender this component
@@ -139,6 +123,7 @@ export class StorageComponent implements OnInit, OnDestroy {
             this.compEntries = inData;
             this.getData();
             this.renderData(this.compEntries);
+            console.log('compEntries: ', this.compEntries);
         }
     }
 
@@ -165,12 +150,6 @@ export class StorageComponent implements OnInit, OnDestroy {
     }
 
     getData() {
-        // Declared but never use -- Commented by K
-        /* const localPath = this.path ? '/' + this.path : '';
-        const entries = {
-            entries: [{ path: '/appar/', format: 'jpeg', size: 'w64h64' }]
-        }; */
-
         this.dbxConnection
             .usersGetSpaceUsage(null)
             .then(spaceInfo => {
@@ -184,12 +163,6 @@ export class StorageComponent implements OnInit, OnDestroy {
                 console.log(error);
             });
     }
-
-    /* Declared but never use -- Commented by K
-    previewFile(event) {
-        console.log(event.target.innerText);
-    }
-    */
 
     downloadFile(filepath, filename, event) {
         event.preventDefault();
@@ -260,9 +233,8 @@ export class StorageComponent implements OnInit, OnDestroy {
                         });
                 }
             }
-
-            this.inEntries = inEntries;
         }
+        this.inEntries = inEntries;
     }
 
     isImage(fileName: string) {
