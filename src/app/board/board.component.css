@@ -54,3 +54,8 @@ a i {
   width: 100%;
   margin-left: 160px;
 }
+
+.webhook-container {
+  width: 100%;
+  height: 40px;
+}
