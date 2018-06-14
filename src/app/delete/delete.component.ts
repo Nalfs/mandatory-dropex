@@ -28,7 +28,7 @@ export class DeleteComponent implements OnInit, OnDestroy {
               private authService: AuthService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private filesService: FilesService
+              private filesService: FilesService,
               private storage: StorageComponent) { }
 
   ngOnInit() {

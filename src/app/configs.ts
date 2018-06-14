@@ -1,7 +1,7 @@
 // Configurations
 export const dropboxConfig = {
     clientId: 'tefcr0lybxy6atz',
-    redirectUri: 'http://localhost:4200/auth:now',
+    redirectUri: 'https://ec-dropex.firebaseapp.com/auth:now',
     responseType: 'token',
     trustUrl: 'https://www.dropbox.com'
 };
