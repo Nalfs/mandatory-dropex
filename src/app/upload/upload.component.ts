@@ -8,6 +8,7 @@ import { AuthService } from '../auth.service';
 import { DbxAuth } from '../configs';
 import { NullTemplateVisitor } from '@angular/compiler';
 import { UrlMethods } from '../utils';
+import { FilesService } from '../files.service';
 
 @Component({
   selector: 'app-upload',
@@ -28,7 +29,8 @@ export class UploadComponent implements OnInit {
 
     constructor(private authService: AuthService,
                 private http: HttpClient,
-                private router: Router) { }
+                private router: Router,
+                private filesService: FilesService) { }
 
   ngOnInit() {
     this.subscription = this.authService.getAuth()
@@ -45,9 +47,10 @@ export class UploadComponent implements OnInit {
     this.upload();
   }
 
-  upload() {
+  upload(path: any) {
    // const filepath  = this.dropexService.getCurrentPath();
     const filepath = UrlMethods.decodeWithoutParams(this.router.url);
+    console.log('provar med detta', filepath);
     /*  */
     const name = this.filename.name.split('\\').pop();
     const arg = {
@@ -69,6 +72,7 @@ export class UploadComponent implements OnInit {
         console.log(httpOptions);
           const send = this.http.post('https://content.dropboxapi.com/2/files/upload', this.files.item(0), httpOptions);
           send.subscribe((results: any) => {
+            this.filesService.getFiles(filepath);
             alert('Your upload was successfull.');
        },
         error => {
