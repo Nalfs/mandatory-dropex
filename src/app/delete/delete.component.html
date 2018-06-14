@@ -1,10 +1,11 @@
-<div>
-  <div (click)="dropDown = !dropDown" class="dropbtn">...</div>
-    <div *ngIf="dropDown">
-      <a href="#" (click)="delete($event)"><i class="far fa-trash-alt"></i></a>
-      <a href="#"><i class="fas fa-download"></i></a>
-      <a href="#"><i class="far fa-star"></i></a>
-    </div>
+<div class="dropdown show">
+  <a (click)="dropDown = !dropDown">...</a>
+  <div *ngIf="dropDown" class="dropdown-menu">
+    <a (click)="delete($event)" class="dropdown-item">
+      <i class="far fa-trash-alt"></i>
+    </a>
+    <a class="dropdown-item" (click)="download($event)">
+      <i class="fas fa-download"></i>
+    </a>
+  </div>
 </div>
-
-

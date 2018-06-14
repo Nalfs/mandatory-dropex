@@ -1,4 +1,4 @@
-div {
+/* div {
     width: 40px;
     height: 40px;
     line-height: 30px;
@@ -9,15 +9,23 @@ div {
     cursor: pointer;
     position: relative;
     display: inline-block;
-}
+} */
 
 div:hover {
-    border: 1px solid #d0d0d0;
+   /* border: 1px solid #d0d0d0;*/
     
 }
 a {
     text-decoration: none;
     display: block;
+}
+.dropdown-menu {
+    display: block;
+    margin: .25rem -1.125rem;
+    min-width: auto;
+}
+.dropdown-item i:hover {
+    color: blue;
 }
 
 /* .dropdown-content {

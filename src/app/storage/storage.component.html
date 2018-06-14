@@ -10,7 +10,9 @@
   </div>
 
   <div class="sp">
-    <app-search></app-search>
+    <div style="width: 40%;">
+      <app-search></app-search>
+    </div>
     <app-upload></app-upload>
   </div>
 
@@ -52,7 +54,7 @@
             </td>
             <td>
               <div>
-                <app-delete [path]="item.path_lower"></app-delete>
+                <app-delete [path]="item.path_lower" [filename]="item.name"></app-delete>
               </div>
             </td>
           </ng-template>
@@ -85,7 +87,7 @@
             </td>
             <td>
               <div>
-                <app-delete [path]="item.path_lower"></app-delete>
+                <app-delete [path]="item.path_lower" [filename]="item.name"></app-delete>
               </div>
             </td>
           </ng-template>

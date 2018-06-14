@@ -8,6 +8,8 @@ import { Router, Routes } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { FilesService } from './../files.service';
 
+import { StorageComponent } from '../storage/storage.component';
+
 @Component({
   selector: 'app-delete',
   templateUrl: './delete.component.html',
@@ -15,6 +17,7 @@ import { FilesService } from './../files.service';
 })
 export class DeleteComponent implements OnInit, OnDestroy {
   @Input() path: string;
+  @Input() filename: string;
 
   private subscription: Subscription;
   private dbxAuth: DbxAuth;
@@ -25,7 +28,8 @@ export class DeleteComponent implements OnInit, OnDestroy {
               private authService: AuthService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private filesService: FilesService) { }
+              private filesService: FilesService
+              private storage: StorageComponent) { }
 
   ngOnInit() {
     this.subscription = this.authService.getAuth()
@@ -36,6 +40,10 @@ export class DeleteComponent implements OnInit, OnDestroy {
   delete(event) {
     event.preventDefault();
         this.filesService.deleteFile(this.path);
+  }
+  download(event) {
+    event.preventDefault();
+    this.storage.downloadFile(this.path, this.filename, event);
   }
 
   ngOnDestroy() {
