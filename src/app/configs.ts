@@ -1,8 +1,8 @@
 // Configurations
 export const dropboxConfig = {
-    clientId: 'tefcr0lybxy6atz',
-    redirectUri: 'http://localhost:4200/auth:now',
-    responseType: 'token',
+    clientId: '#',
+    redirectUri: '#',
+    responseType: '#',
     trustUrl: 'https://www.dropbox.com'
 };
 
@@ -14,12 +14,12 @@ export const dropboxApi = {
 export const firebaseConfig = {
     production: false,
     firebase: {
-        apiKey: 'AIzaSyAfwHE20PEcAAAHLCav6T8pvBx_DVmpX2A',
-        authDomain: 'angular-dropbox-webhooks.firebaseapp.com',
-        databaseURL: 'https://angular-dropbox-webhooks.firebaseio.com',
-        projectId: 'angular-dropbox-webhooks',
-        storageBucket: 'angular-dropbox-webhooks.appspot.com',
-        messagingSenderId: '425496205859'
+        apiKey: '#',
+        authDomain: '#',
+        databaseURL: '#',
+        projectId: '#',
+        storageBucket: '#',
+        messagingSenderId: '#'
     },
     listPath: '/dbxwebhooks',
     orderBy: 'list_folder/accounts/0'
