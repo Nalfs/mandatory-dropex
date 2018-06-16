@@ -10,7 +10,7 @@ You may want to view about these things in this project:
 * [Cloud Functions for Firebase](https://firebase.google.com/docs/functions/)
 * [Google Cloud Platform](https://cloud.google.com/)
 
-# Other repositories
+## Other repositories used for this project
 * [Dropbox webhooks](https://github.com/nguyenkhois/dropbox-webhooks)
 * [Angular - Firebase example](https://github.com/nguyenkhois/angular-firebase-example)
 * [Angular - Firestore example](https://github.com/nguyenkhois/angular-firestore-example)
